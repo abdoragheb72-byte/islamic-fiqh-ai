@@ -9,9 +9,9 @@ st.set_page_config(
     page_title="الموسوعة الفقهية والحديثية الذكية",
     page_icon="🕌",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
-# تخصيص واجهة المستخدم: تصميم متجاوب بدون مشاكل العرض على الهواتف
+# تخصيص واجهة المستخدم: حل مشكلة التداخل في الهواتف نهائياً
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@700&family=Cairo:wght@400;600;700;800;900&display=swap');
@@ -25,8 +25,13 @@ st.markdown("""
         background: radial-gradient(circle at 50% 0%, #0b1528 0%, #050b14 65%, #02050a 100%);
         color: #ffffff;
         direction: rtl;
+        overflow-x: hidden !important;
     }
-    /* كرت الذكر الثابت الأنيق (بدون تشوهات الأنيميشن على الهواتف) */
+    /* إخفاء القائمة الجانبية المشوهة للهواتف */
+    [data-testid="stSidebar"], [data-testid="collapsedControl"] {
+        display: none !important;
+    }
+    /* كرت الذكر الثابت */
     .dhikr-card {
         background: linear-gradient(90deg, rgba(234, 179, 8, 0.08) 0%, rgba(234, 179, 8, 0.2) 50%, rgba(234, 179, 8, 0.08) 100%);
         border: 1.5px solid rgba(234, 179, 8, 0.5);
@@ -44,7 +49,7 @@ st.markdown("""
         margin: 0;
         line-height: 1.6;
     }
-    /* الهيدر الملكي المتناسق */
+    /* الهيدر الملكي */
     .royal-hero {
         background: linear-gradient(135deg, rgba(15, 29, 54, 0.85) 0%, rgba(8, 16, 32, 0.95) 100%);
         border: 2px solid rgba(234, 179, 8, 0.5);
@@ -303,7 +308,7 @@ def prepare_new_round(level):
     st.session_state["shuffled_options"] = []
 if not st.session_state["current_round_questions"]:
     prepare_new_round(st.session_state["quiz_level"])
-# ملف حفظ السجل المحلي
+# ملف حفظ السجل
 HISTORY_FILE = "search_history.json"
 def load_history():
     if os.path.exists(HISTORY_FILE):
@@ -318,28 +323,7 @@ def save_history(hl):
 if "history" not in st.session_state: st.session_state["history"] = load_history()
 if "current_question" not in st.session_state: st.session_state["current_question"] = ""
 if "current_answer" not in st.session_state: st.session_state["current_answer"] = ""
-# القائمة الجانبية
-with st.sidebar:
-    st.markdown("<h3 style='color:#fbbf24; text-align:center;'>📜 سجل الاستفسارات</h3>", unsafe_allow_html=True)
-    st.markdown("<hr style='border-color: rgba(234,179,8,0.3);'>", unsafe_allow_html=True)
-    
-    if st.session_state["history"]:
-        if st.button("🗑️ مسح السجل بالكامل", use_container_width=True):
-            st.session_state["history"] = []
-            save_history([])
-            st.session_state["current_question"] = ""
-            st.session_state["current_answer"] = ""
-            st.rerun()
-        st.markdown("<br>", unsafe_allow_html=True)
-        for idx, item in enumerate(st.session_state["history"]):
-            btn_label = f"📌 {item['question'][:24]}..." if len(item['question']) > 24 else f"📌 {item['question']}"
-            if st.button(btn_label, key=f"hist_{idx}", use_container_width=True):
-                st.session_state["current_question"] = item["question"]
-                st.session_state["current_answer"] = item["answer"]
-                st.rerun()
-    else:
-        st.info("لا توجد استفسارات محفوظة بعد.")
-# بطاقة الذكر الثابتة الخالية من أي مشاكل في العرض
+# بطاقة الذكر
 st.markdown("""
 <div class="dhikr-card">
     <p class="dhikr-text">✨ سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ • اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَىٰ نَبِيِّنَا مُحَمَّدٍ ✨</p>
@@ -428,6 +412,14 @@ with tab_main:
                 updated_hist.insert(0, {"question": query_text, "answer": result})
                 st.session_state["history"] = updated_hist
                 save_history(updated_hist)
+    # قسم السجل المنسدل المدمج والأنيق
+    if st.session_state["history"]:
+        with st.expander("📜 سجل استفساراتك المحفوظة"):
+            for idx, item in enumerate(st.session_state["history"]):
+                if st.button(f"📌 {item['question']}", key=f"hist_btn_{idx}", use_container_width=True):
+                    st.session_state["current_question"] = item["question"]
+                    st.session_state["current_answer"] = item["answer"]
+                    st.rerun()
 # ----------------- التبويب 2: التحقيق الحديثي -----------------
 with tab_hadith:
     st.markdown("<p style='color:#94a3b8;'>اكتب أي حديث أو جزء من المتن للتحقق من صحته، راويه، أصله في كتب السنة، وحكم المحدثين عليه.</p>", unsafe_allow_html=True)
