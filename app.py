@@ -11,102 +11,83 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-# تخصيص واجهة المستخدم: متجاوبة 100% مع الهواتف والشاشات الكبيرة + ثيم أندلسي ملكي
+# تخصيص واجهة المستخدم: تصميم متجاوب بدون مشاكل العرض على الهواتف
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@700&family=Cairo:wght@400;600;700;800;900&display=swap');
     
     * {
-        font-family: 'Cairo', sans-serif;
-        direction: rtl;
-        box-sizing: border-box;
+        font-family: 'Cairo', sans-serif !important;
+        box-sizing: border-box !important;
     }
     
     .stApp {
         background: radial-gradient(circle at 50% 0%, #0b1528 0%, #050b14 65%, #02050a 100%);
         color: #ffffff;
-        overflow-x: hidden !important;
+        direction: rtl;
     }
-    /* الشريط العلوي */
-    .ticker-wrap {
-        width: 100%;
-        overflow: hidden;
-        background: linear-gradient(90deg, rgba(234, 179, 8, 0.05) 0%, rgba(234, 179, 8, 0.22) 50%, rgba(234, 179, 8, 0.05) 100%);
+    /* كرت الذكر الثابت الأنيق (بدون تشوهات الأنيميشن على الهواتف) */
+    .dhikr-card {
+        background: linear-gradient(90deg, rgba(234, 179, 8, 0.08) 0%, rgba(234, 179, 8, 0.2) 50%, rgba(234, 179, 8, 0.08) 100%);
         border: 1.5px solid rgba(234, 179, 8, 0.5);
-        border-radius: 50px;
-        padding: 0.6rem 0;
+        border-radius: 20px;
+        padding: 0.8rem 1rem;
         margin-bottom: 1.5rem;
+        text-align: center;
         box-shadow: 0 0 20px rgba(234, 179, 8, 0.15);
-        position: relative;
-        white-space: nowrap;
     }
-    .ticker-move {
-        display: inline-block;
-        white-space: nowrap;
-        animation: tickerAnim 30s linear infinite;
-    }
-    .ticker-item {
-        display: inline-block;
-        font-family: 'Amiri', serif;
+    .dhikr-text {
+        font-family: 'Amiri', serif !important;
         font-size: 1.25rem;
         font-weight: 700;
         color: #fef08a;
-        margin: 0 1.5rem;
+        margin: 0;
+        line-height: 1.6;
     }
-    .ticker-bullet {
-        color: #38bdf8;
-        margin: 0 0.5rem;
-    }
-    @keyframes tickerAnim {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(50%); }
-    }
-    /* الهيدر الملكي المتجاوب */
+    /* الهيدر الملكي المتناسق */
     .royal-hero {
         background: linear-gradient(135deg, rgba(15, 29, 54, 0.85) 0%, rgba(8, 16, 32, 0.95) 100%);
         border: 2px solid rgba(234, 179, 8, 0.5);
         border-radius: 20px;
-        padding: 2rem 1.2rem;
+        padding: 1.8rem 1rem;
         margin-bottom: 1.5rem;
         text-align: center;
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
     }
     .royal-hero h1 {
-        font-family: 'Aref Ruqaa', serif;
+        font-family: 'Aref Ruqaa', serif !important;
         color: #fbbf24;
-        font-size: 2.3rem;
+        font-size: 2.2rem;
         margin-bottom: 0.5rem;
         line-height: 1.3;
     }
     .royal-hero p {
         color: #93c5fd;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         font-weight: 600;
         margin-bottom: 0;
     }
-    /* تحسين علامات التبويب للهاتف */
+    /* التبويبات */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
         background: rgba(15, 29, 54, 0.6);
         padding: 6px;
         border-radius: 14px;
         border: 1px solid rgba(234, 179, 8, 0.3);
-        flex-wrap: wrap;
     }
     .stTabs [data-baseweb="tab"] {
         border-radius: 10px;
         color: #cbd5e1;
         font-weight: 700;
-        font-size: 1.05rem;
-        padding: 8px 14px;
-        white-space: normal;
+        font-size: 1rem;
+        padding: 8px 12px;
     }
     .stTabs [aria-selected="true"] {
         background: linear-gradient(135deg, rgba(234, 179, 8, 0.3) 0%, rgba(234, 179, 8, 0.12) 100%) !important;
         color: #fbbf24 !important;
         border: 1px solid rgba(234, 179, 8, 0.6) !important;
     }
-    /* تحسين نصوص الإدخال والأزرار للهاتف */
+    /* حقول الإدخال والأزرار */
     .stTextInput>div>div>input, .stTextArea>div>div>textarea {
         background: rgba(15, 29, 54, 0.9) !important;
         color: #ffffff !important;
@@ -117,7 +98,7 @@ st.markdown("""
         font-weight: 600 !important;
     }
     .stRadio label {
-        font-size: 1.15rem !important;
+        font-size: 1.1rem !important;
         font-weight: 600 !important;
         color: #f1f5f9 !important;
         padding: 4px 0;
@@ -136,9 +117,8 @@ st.markdown("""
         border-radius: 12px !important;
         padding: 0.75rem 1.5rem !important;
         width: 100%;
-        margin-top: 0.5rem;
     }
-    /* نصوص الفتاوى والنتائج */
+    /* نصوص الإجابات والنتائج */
     .stMarkdown {
         font-size: 1.15rem !important;
         line-height: 2 !important;
@@ -147,7 +127,7 @@ st.markdown("""
     .stMarkdown h1 {
         font-family: 'Amiri', serif !important;
         color: #fbbf24 !important;
-        font-size: 1.8rem !important;
+        font-size: 1.75rem !important;
         border-bottom: 1.5px solid rgba(234, 179, 8, 0.4) !important;
         padding-bottom: 0.4rem !important;
         margin-top: 1.5rem !important;
@@ -155,27 +135,13 @@ st.markdown("""
     .stMarkdown h2, .stMarkdown h3 {
         font-family: 'Amiri', serif !important;
         color: #38bdf8 !important;
-        font-size: 1.45rem !important;
-    }
-    /* الجداول */
-    table {
-        width: 100% !important;
-        overflow-x: auto;
-        display: block;
-        margin: 1.5rem 0 !important;
-        background: rgba(15, 29, 54, 0.8) !important;
-        border: 1px solid rgba(234, 179, 8, 0.45) !important;
-        border-radius: 12px !important;
-    }
-    th, td {
-        padding: 10px 14px !important;
-        font-size: 1rem !important;
+        font-size: 1.4rem !important;
     }
     .quiz-card {
         background: rgba(15, 29, 54, 0.95);
         border: 1.5px solid #eab308;
         border-radius: 16px;
-        padding: 1.4rem;
+        padding: 1.3rem;
         margin-bottom: 1rem;
     }
     .royal-footer {
@@ -207,28 +173,21 @@ EXPANDED_QUIZ_DATABASE = {
         {"question": "ما الحكم إذا نوى المسلم الصيام المفروض بعد طلوع الفجر؟", "options": ["لا يصح صومه ويجب تبييت النية من الليل", "يصح صومه كصيام التطوع", "يصح وعليه كفارة"], "correct": "لا يصح صومه ويجب تبييت النية من الليل", "proof": "لقوله ﷺ: «من لم يُبيّتِ الصيامَ قبلَ الفجرِ، فلا صيامَ له» (رواه أصحاب السنن)."},
         {"question": "كم عدد التكبيرات الزوائد في الركعة الأولى من صلاة العيد عند جمهور العلماء؟", "options": ["سبع تكبيرات مع تكبيرة الإحرام", "ثلاث تكبيرات فقط", "خمس تكبيرات"], "correct": "سبع تكبيرات مع تكبيرة الإحرام", "proof": "ثبت عن النبي ﷺ أنه كبّر في العيدين في الأولى سبعاً وفي الثانية خمساً."},
         {"question": "ما هو الركن الأعظم في الحج الذي يفوت الحج بفواته؟", "options": ["الوقوف بعرفة", "طواف الإفاضة", "السعي بين الصفا والمروة"], "correct": "الوقوف بعرفة", "proof": "لقوله ﷺ الصريح: «الحجُّ عرفةُ» (رواه الترمذي وأحمد)."},
-        {"question": "ما حكم الوضوء من أكل لحم الإبل؟", "options": ["ينقض الوضوء عند الحنابلة ومذهب الحديث", "لا ينقض الوضوء عند جميع المذاهب", "مستحب فقط"], "correct": "ينقض الوضوء عند الحنابلة ومذهب الحديث", "proof": "لحديث جابر بن سمرة رضي الله عنه: أن رجلاً سأل النبي ﷺ: أنتوضأ من لحوم الإبل؟ قال: «نعم» (صحيح مسلم)."},
-        {"question": "ما هو أقل مدة للاعتكاف المسنون في المسجد؟", "options": ["لحظة أو ساعة بنية الاعتكاف عند الجمهور", "يوم وليلة كاملين حتماً", "عشرة أيام كاملة"], "correct": "لحظة أو ساعة بنية الاعتكاف عند الجمهور", "proof": "يصح الاعتكاف عند الشافعية والحنابلة ولو زمناً يسيراً مع النية في المسجد."},
-        {"question": "ما حكم من نسي التسمية في أول الوضوء وتذكر في أثنائه؟", "options": ["يسمي ويكمل وضوءه ولا يعيد", "يبطل وضوءه ويجب أن يعيده", "الوضوء صحيح ولا يلزمه شيء"], "correct": "يسمي ويكمل وضوءه ولا يعيد", "proof": "التسمية سنة مؤكدة، وإن نسيها وتذكر في الأثناء سمى وأكمل."},
-        {"question": "أين يكون موضع اليدين في السجود الصحيح؟", "options": ["حذو المنكبين أو فروع الأذنين", "أمام الرأس بكثير", "ملاصقة للركبتين"], "correct": "حذو المنكبين أو فروع الأذنين", "proof": "هكذا وصف الصحابة سجود النبي ﷺ كما في حديث وائل بن حجر وغيره."}
+        {"question": "ما حكم الوضوء من أكل لحم الإبل؟", "options": ["ينقض الوضوء عند الحنابلة ومذهب الحديث", "لا ينقض الوضوء عند جميع المذاهب", "مستحب فقط"], "correct": "ينقض الوضوء عند الحنابلة ومذهب الحديث", "proof": "لحديث جابر بن سمرة رضي الله عنه: أن رجلاً سأل النبي ﷺ: أنتوضأ من لحوم الإبل؟ قال: «نعم» (صحيح مسلم)."}
     ],
     "المستوى الثاني: المتوسط (فقه المعاملات ودقائق العبادات) 🟡": [
         {"question": "ما حكم سجود السهو إذا سلّم المصلي عن نقص في صلاته وتذكر بعد لحظات يسيرة؟", "options": ["يأتي بما فاته ثم يسجد للسهو ويسلم", "تبطل صلاته ويعيدها كاملة", "يسجد للسهو فقط وتجزئه"], "correct": "يأتي بما فاته ثم يسجد للسهو ويسلم", "proof": "لحديث ذي اليدين؛ حيث أتم النبي ﷺ الركعتين ثم سلم، ثم سجد سجدتي السهو وسلّم."},
         {"question": "ما هو بيع العينة المنهي عنه شرعاً؟", "options": ["أن يبيع سلعة بثمن مؤجل ثم يشتريها نقداً بأقل", "بيع الثمار قبل بدو صلاحها", "بيع ما لا يملك الإنسان"], "correct": "أن يبيع سلعة بثمن مؤجل ثم يشتريها نقداً بأقل", "proof": "لقوله ﷺ: «إذا تبايعتُم بالعِينَةِ... سلَّطَ اللهُ عليكُمْ ذُلاً» (رواه أبو داود)."},
         {"question": "ما حكم مسح الخفين للمسافر والمقيم من حيث المدة؟", "options": ["يوم وليلة للمقيم، وثلاثة أيام بلياليها للمسافر", "يومان للمقيم، وأربعة للمسافر", "يوم وليلة للجميع بلا تفريق"], "correct": "يوم وليلة للمقيم، وثلاثة أيام بلياليها للمسافر", "proof": "لحديث علي بن أبي طالب رضي الله عنه في صحيح مسلم بتحديد هذه المدد."},
-        {"question": "ما حكم الإحرام بالحج أو العمرة قبل الميقات المكاني؟", "options": ["ينعقد إحرامه مع الكراهة عند الجمهور", "باطل ويجب الرجوع للميقات", "لا ينعقد وتلزمه شاة"], "correct": "ينعقد إحرامه مع الكراهة عند الجمهور", "proof": "يكره الإحرام قبل الميقات لمخالفة هدي النبي ﷺ، لكن ينعقد إحرامه شرعاً."},
-        {"question": "ما هو خيار المجلس في البيوع الشرعية؟", "options": ["حق العاقدين في فسخ البيع ما داما في مكان التبايع ولم يتفرقا", "خيار المشتري في إرجاع السلعة خلال 3 أيام", "خيار البائع في زيادة السعر"], "correct": "حق العاقدين في فسخ البيع ما داما في مكان التبايع ولم يتفرقا", "proof": "لقوله ﷺ: «البيعانِ بالخيارِ ما لم يتفرَّقا» (متفق عليه)."},
-        {"question": "ما حكم الجمع بين صلاتي الظهر والعصر تقديماً أو تأخيراً للمسافر؟", "options": ["سنة ورخصة جائزة باتفاق الجمهور", "واجب يأثم بتركه", "خاص بصلاة الخوف فقط"], "correct": "سنة ورخصة جائزة باتفاق الجمهور", "proof": "كان النبي ﷺ إذا ارتحل قبل أن تزيغ الشمس أخّر الظهر إلى العصر ثم جمع بينهما."}
+        {"question": "ما هو خيار المجلس في البيوع الشرعية؟", "options": ["حق العاقدين في فسخ البيع ما داما في مكان التبايع ولم يتفرقا", "خيار المشتري في إرجاع السلعة خلال 3 أيام", "خيار البائع في زيادة السعر"], "correct": "حق العاقدين في فسخ البيع ما داما في مكان التبايع ولم يتفرقا", "proof": "لقوله ﷺ: «البيعانِ بالخيارِ ما لم يتفرَّقا» (متفق عليه)."}
     ],
     "المستوى الثالث: المتقدم (أصول الفقه، مصطلح الحديث، والخلاف العالي) 🔴": [
         {"question": "ما هو الحديث المرسل عند جمهور المحدثين؟", "options": ["ما سقط من إسناده الصحابي ورفعه التابعي مباشرة", "ما سقط من وسط سنده راويان على التوالي", "الحديث الذي انفرد بروايته شخص واحد"], "correct": "ما سقط من إسناده الصحابي ورفعه التابعي مباشرة", "proof": "المرسل هو قول التابعي صغيراً كان أو كبيراً: قال رسول الله ﷺ كذا."},
         {"question": "ما هو مذهب جمهور الأصوليين في حجية 'قول الصحابي' إذا انتشر ولم يُعلم له مخالف؟", "options": ["إجماع سكوتي وهو حجة عند الجمهور", "ليس بحجة مطلقاً", "حجة خاصة بأهل المدينة فقط"], "correct": "إجماع سكوتي وهو حجة عند الجمهور", "proof": "يعتبر إجماعاً سكوتياً وظنياً معتبراً لدى غالبية الأصوليين وفقهاء المذاهب."},
-        {"question": "ما الفرق بين 'الفرض' و'الواجب' عند السادة الحنفية؟", "options": ["الفرض ما ثبت بدليل قطعي، والواجب ما ثبت بدليل ظني", "الفرض والواجب مترادفان تماماً", "الواجب آكد من الفرض في العقيدة"], "correct": "الفرض ما ثبت بدليل قطعي، والواجب ما ثبت بدليل ظني", "proof": "يميز الحنفية بين الفرض (كالصلاة بالدليل القطعي) والواجب (كالوتر بالدليل الظني)."},
-        {"question": "ما المقصود بقاعدة 'العام يبقى على عمومه حتى يرد دليل التخصيص'؟", "options": ["أن النص العام يشمل كل أفراده حتى يأتي نص خاص يقيده", "أن النص العام ينسخ كل النصوص السابقة", "أن النص العام لا يعمل به إلا بإجماع"], "correct": "أن النص العام يشمل كل أفراده حتى يأتي نص خاص يقيده", "proof": "من القواعد الأصولية القطعية المقررة عند الأئمة الأربعة في دلالات الألفاظ."}
+        {"question": "ما الفرق بين 'الفرض' و'الواجب' عند السادة الحنفية؟", "options": ["الفرض ما ثبت بدليل قطعي، والواجب ما ثبت بدليل ظني", "الفرض والواجب مترادفان تماماً", "الواجب آكد من الفرض في العقيدة"], "correct": "الفرض ما ثبت بدليل قطعي، والواجب ما ثبت بدليل ظني", "proof": "يميز الحنفية بين الفرض (كالصلاة بالدليل القطعي) والواجب (كالوتر بالدليل الظني)."}
     ]
 }
-# قراءة مفتاح Groq بأمان
-# قراءة المفتاح بأمان محلياً وسحابياً دون أخطاء
+# قراءة مفتاح Groq بأمان تام
 try:
     GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 except Exception:
@@ -327,12 +286,12 @@ def prepare_new_round(level):
     pool = st.session_state["quiz_pool"][level]
     unseen = [q for q in pool if q["question"] not in st.session_state["seen_questions"]]
     
-    if len(unseen) < 5:
+    if len(unseen) < 4:
         st.session_state["seen_questions"] = set()
         unseen = pool
         
     random.shuffle(unseen)
-    selected_round = unseen[:10]
+    selected_round = unseen[:8]
     for q in selected_round:
         st.session_state["seen_questions"].add(q["question"])
         
@@ -380,20 +339,10 @@ with st.sidebar:
                 st.rerun()
     else:
         st.info("لا توجد استفسارات محفوظة بعد.")
-# الشريط العلوي
+# بطاقة الذكر الثابتة الخالية من أي مشاكل في العرض
 st.markdown("""
-<div class="ticker-wrap">
-    <div class="ticker-move">
-        <span class="ticker-item">✨ لَا إِلَٰهَ إِلَّا ٱللَّٰهُ مُحَمَّدٌ رَسُولُ ٱللَّٰهِ ✨</span>
-        <span class="ticker-bullet">✦</span>
-        <span class="ticker-item">🌸 اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَصَحْبِهِ أَجْمَعِينَ 🌸</span>
-        <span class="ticker-bullet">✦</span>
-        <span class="ticker-item">🌿 سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ 🌿</span>
-        <span class="ticker-bullet">✦</span>
-        <span class="ticker-item">💎 أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ وَأَتُوبُ إِلَيْهِ 💎</span>
-        <span class="ticker-bullet">✦</span>
-        <span class="ticker-item">🤍 لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ 🤍</span>
-    </div>
+<div class="dhikr-card">
+    <p class="dhikr-text">✨ سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ • اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَىٰ نَبِيِّنَا مُحَمَّدٍ ✨</p>
 </div>
 """, unsafe_allow_html=True)
 # الهيدر الترحيبي
@@ -405,10 +354,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 # علامات التبويب الرئيسية
 tab_main, tab_hadith, tab_dict, tab_interactive = st.tabs([
-    "🏛️ المحرك الفقهي والمقارن",
-    "📜 التحقيق الحديثي المباشر",
-    "📖 معجم غريب الألفاظ",
-    "🏆 بنك المسابقات والتحديات"
+    "🏛️ المحرك الفقهي",
+    "📜 التحقيق الحديثي",
+    "📖 معجم الألفاظ",
+    "🏆 بنك المسابقات"
 ])
 # ----------------- التبويب 1: المحرك الفقهي -----------------
 with tab_main:
@@ -481,7 +430,7 @@ with tab_main:
                 save_history(updated_hist)
 # ----------------- التبويب 2: التحقيق الحديثي -----------------
 with tab_hadith:
-    st.markdown("<div class='feature-box'><h4>🔍 التحقيق الحديثي المباشر وتخريج الأسانيد</h4><p style='color:#94a3b8;'>اكتب أي حديث أو جزء من المتن للتحقق من صحته، راويه، أصله في كتب السنة، وحكم المحدثين عليه.</p></div>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#94a3b8;'>اكتب أي حديث أو جزء من المتن للتحقق من صحته، راويه، أصله في كتب السنة، وحكم المحدثين عليه.</p>", unsafe_allow_html=True)
     hadith_input = st.text_input("اكتب نص الحديث المراد تخريجه:", placeholder="مثال: إنما الأعمال بالنيات...")
     if st.button("🔎 تخريج وتحقيق الحديث", use_container_width=True):
         if hadith_input.strip():
@@ -499,7 +448,7 @@ with tab_hadith:
             execute_groq_prompt(hadith_input, h_sys, h_output)
 # ----------------- التبويب 3: معجم غريب الألفاظ -----------------
 with tab_dict:
-    st.markdown("<div class='feature-box'><h4>📖 معجم غريب الألفاظ والمصطلحات</h4><p style='color:#94a3b8;'>شرح دقيق للمصطلحات القديمة، المقادير الشرعية، والألفاظ التراثية الصعبة.</p></div>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#94a3b8;'>شرح دقيق للمصطلحات القديمة، المقادير الشرعية، والألفاظ التراثية الصعبة.</p>", unsafe_allow_html=True)
     term_input = st.text_input("اكتب اللفظ أو المصطلح الشرعي:", placeholder="مثال: الصاع، العول، الكلالة، القسامة...")
     if st.button("📚 شرح وتفسير المصطلح", use_container_width=True):
         if term_input.strip():
@@ -515,7 +464,7 @@ with tab_dict:
             execute_groq_prompt(term_input, t_sys, t_output)
 # ----------------- التبويب 4: بنك المسابقات والتحديات -----------------
 with tab_interactive:
-    st.markdown("<h3 style='color:#fbbf24; font-size:1.8rem;'>🏆 بنك المسابقات والتحديات الفقهية</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='color:#fbbf24; font-size:1.6rem;'>🏆 بنك المسابقات والتحديات الفقهية</h3>", unsafe_allow_html=True)
     
     selected_level = st.selectbox(
         "🎯 حدد مستوى التحدي:",
@@ -527,7 +476,7 @@ with tab_interactive:
         prepare_new_round(selected_level)
         st.rerun()
     if st.button("⚡ توليد وتجديد أسئلة غير مكررة بالذكاء الاصطناعي", use_container_width=True):
-        with st.spinner("جاري استحضار أسئلة فقهية جديدة وإضافتها للموسوعة..."):
+        with st.spinner("جاري استحضار أسئلة فقهية جديدة..."):
             new_q = generate_dynamic_quiz_questions(st.session_state["quiz_level"])
             if new_q and len(new_q) > 0:
                 st.session_state["quiz_pool"][st.session_state["quiz_level"]].extend(new_q)
@@ -536,7 +485,7 @@ with tab_interactive:
                 st.rerun()
             else:
                 prepare_new_round(st.session_state["quiz_level"])
-                st.info("🔄 تم تجديد الأسئلة وبدء جولة غير مكررة من بنك الأسئلة الموسع!")
+                st.info("🔄 تم تجديد الأسئلة وبدء جولة غير مكررة من بنك الأسئلة!")
                 st.rerun()
     questions = st.session_state["current_round_questions"]
     current_idx = st.session_state["quiz_idx"]
@@ -555,10 +504,10 @@ with tab_interactive:
             st.progress(progress_val)
             st.write(f"📌 **السؤال {current_idx + 1} من {total_q} في هذه الجولة**")
         with col_sc2:
-            st.markdown(f"<div style='text-align:left; color:#facc15; font-size:1.3rem; font-weight:bold;'>⭐ النقاط: {st.session_state['quiz_score']}/{total_q}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='text-align:left; color:#facc15; font-size:1.2rem; font-weight:bold;'>⭐ النقاط: {st.session_state['quiz_score']}/{total_q}</div>", unsafe_allow_html=True)
         st.markdown(f"""
         <div class="quiz-card">
-            <h3 style="color:#ffffff; line-height:1.6; font-size:1.35rem;">{q_data['question']}</h3>
+            <h3 style="color:#ffffff; line-height:1.6; font-size:1.3rem;">{q_data['question']}</h3>
         </div>
         """, unsafe_allow_html=True)
         chosen_answer = st.radio(
@@ -599,8 +548,8 @@ with tab_interactive:
         st.balloons()
         st.markdown(f"""
         <div class="quiz-card" style="text-align:center;">
-            <h2 style="color:#fbbf24; font-size:1.8rem;">🎉 بارك الله فيك! أكملت هذه الجولة بنجاح</h2>
-            <p style="font-size:1.4rem; color:#ffffff; margin: 1rem 0;">نتيجتك الإجمالية: <strong>{st.session_state['quiz_score']} من {total_q}</strong></p>
+            <h2 style="color:#fbbf24; font-size:1.6rem;">🎉 بارك الله فيك! أكملت هذه الجولة بنجاح</h2>
+            <p style="font-size:1.3rem; color:#ffffff; margin: 1rem 0;">نتيجتك الإجمالية: <strong>{st.session_state['quiz_score']} من {total_q}</strong></p>
         </div>
         """, unsafe_allow_html=True)
         
