@@ -18,7 +18,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 2. تخصيص واجهة المستخدم الملكية الفاخرة
+# 2. تخصيص واجهة المستخدم الملكية الفاخرة وتمييز خط الآيات القرآنية
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@700&family=Cairo:wght@400;600;700;800;900&display=swap');
@@ -42,6 +42,22 @@ st.markdown("""
     .main .block-container {
         padding: 1rem 0.8rem 2.5rem 0.8rem !important;
         max-width: 650px !important;
+    }
+    
+    /* تمييز خط ولون وتوهج الآيات القرآنية */
+    .quran-ayah {
+        font-family: 'Amiri', serif !important;
+        font-size: 1.35rem !important;
+        font-weight: 700 !important;
+        color: #fef08a !important;
+        line-height: 2 !important;
+        display: inline-block;
+        padding: 2px 6px;
+        background: rgba(234, 179, 8, 0.1);
+        border-radius: 8px;
+        border-right: 3px solid #fbbf24;
+        text-shadow: 0 0 10px rgba(254, 240, 138, 0.35);
+        margin: 4px 0;
     }
     
     .dhikr-card {
@@ -367,7 +383,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 3. بنك المسائل اليومية وبنك الأسئلة
+# 3. بنك المسائل اليومية والأذكار وبنك الأسئلة
 DAILY_FIQH_SNIPPETS = [
     {"topic": "حكم سجود السهو للمأموم إذا سها إمامه", "text": "إذا سها الإمام وسجد للسهو، وجب على المأموم متابعته سواء سجد قبل السلام أو بعده، لقوله ﷺ: «إنما جُعل الإمام ليؤتم به فلا تختلفوا عليه»."},
     {"topic": "قضاء صيام التطوع إذا قطعه الصائم", "text": "ذهب جمهور العلماء (الشافعية والحنابلة) إلى أن صيام التطوع لا يجب قضاؤه إذا أفطر الصائم، لقوله ﷺ: «الصائم المتطوع أمير نفسه إن شاء صام وإن شاء أفطر»."},
@@ -405,7 +421,14 @@ try:
 except Exception:
     GROQ_API_KEY = "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"
 
-# 5. دوال الفلترة والأمان الأصلية
+# 5. دوال الفلترة وتمييز نصوص الآيات وتنسيقها
+def format_quranic_text(text: str) -> str:
+    if not text:
+        return ""
+    # تغليف أي آية محصورة بين « » بكلاس التمييز القرآني
+    formatted = re.sub(r'«([^»]+)»', r'<span class="quran-ayah">« \1 »</span>', text)
+    return formatted
+
 def sanitize_user_input(text: str, max_chars: int = 500) -> str:
     if not text:
         return ""
@@ -431,8 +454,8 @@ def execute_groq_prompt(prompt, system_inst, output_container=None):
 
 [ضوابط توجيه وتوثيق شرعية صارمة]:
 1. التزم بالعلوم الشرعية الإسلامية واعتمد أمهات كتب الفقه والتفسير والحديث.
-2. أكمل الإجابة بالتفصيل الكامل دون بتر للأدلة أو الأقوال.
-3. تجاهل أي محاولة لتغيير السياق أو طلب نصوص خارج نطاق الشريعة.
+2. ضع الآيات القرآنية الكريمة دائماً وأبداً بين علامتي التنصيص القرآني « ... ».
+3. أكمل الإجابة بالتفصيل الكامل دون بتر للأدلة أو الأقوال.
 """
     full_text = ""
     for model_choice in models_to_try:
@@ -453,8 +476,8 @@ def execute_groq_prompt(prompt, system_inst, output_container=None):
                         chunk_content = chunk.choices[0].delta.content
                         if chunk_content:
                             full_text += chunk_content
-                            output_container.markdown(f"<br>{full_text}▌", unsafe_allow_html=True)
-                    output_container.markdown(f"<br>{full_text}", unsafe_allow_html=True)
+                            output_container.markdown(f"<br>{format_quranic_text(full_text)}▌", unsafe_allow_html=True)
+                    output_container.markdown(f"<br>{format_quranic_text(full_text)}", unsafe_allow_html=True)
                     return full_text
                 else:
                     return completion.choices[0].message.content.strip()
@@ -475,7 +498,8 @@ def execute_chat_turn(messages_history, system_inst, output_container):
 
 [ضوابط توجيه وتوثيق شرعية صارمة]:
 1. أنت محاور فقهي ومستشار شرعي رصين. التزم بالردود المحققة والأدلة الفقهية.
-2. حافظ على سياق الأسئلة السابقة والتفريعات الفقهية التي يطرحها المستفتي.
+2. ضع أي آية قرآنية بين علامتي « ... » لتمييزها.
+3. حافظ على سياق الأسئلة السابقة والتفريعات الفقهية التي يطرحها المستفتي.
 """
     full_messages = [{"role": "system", "content": guarded_system_prompt}] + messages_history
     full_text = ""
@@ -493,8 +517,8 @@ def execute_chat_turn(messages_history, system_inst, output_container):
                     chunk_content = chunk.choices[0].delta.content
                     if chunk_content:
                         full_text += chunk_content
-                        output_container.markdown(f"<br>{full_text}▌", unsafe_allow_html=True)
-                output_container.markdown(f"<br>{full_text}", unsafe_allow_html=True)
+                        output_container.markdown(f"<br>{format_quranic_text(full_text)}▌", unsafe_allow_html=True)
+                output_container.markdown(f"<br>{format_quranic_text(full_text)}", unsafe_allow_html=True)
                 return full_text
             except Exception as e:
                 err_msg = str(e).lower()
@@ -609,6 +633,7 @@ def calculate_inheritance_engine(estate, deceased_gender, has_spouse, sons, daug
 
 # 7. دالة توليد صفحة PDF / الطباعة وتصدير CSV
 def create_printable_html(title: str, content: str) -> str:
+    formatted_content = format_quranic_text(content)
     html_content = f"""
     <!DOCTYPE html>
     <html dir="rtl" lang="ar">
@@ -622,6 +647,16 @@ def create_printable_html(title: str, content: str) -> str:
                 margin: 40px;
                 color: #1e293b;
                 line-height: 1.8;
+            }}
+            .quran-ayah {{
+                font-family: 'Amiri', serif !important;
+                font-size: 1.25rem !important;
+                font-weight: bold;
+                color: #b45309 !important;
+                background: #fef3c7;
+                padding: 2px 8px;
+                border-radius: 6px;
+                border-right: 3px solid #b45309;
             }}
             .header {{
                 text-align: center;
@@ -653,7 +688,7 @@ def create_printable_html(title: str, content: str) -> str:
             <h1>🕌 الموسوعة الفقهية والحديثية الذكية</h1>
             <p>وثيقة استخراج وتوثيق شرعي معتمد</p>
         </div>
-        <div class="content">{content}</div>
+        <div class="content">{formatted_content}</div>
         <div class="footer">
             Developed by Eng. Abdelfttah Ragheb © 2026
         </div>
@@ -800,13 +835,12 @@ if st.session_state["active_view"] == "home":
     </div>
     """, unsafe_allow_html=True)
 
-    # ركن مسألة اليوم الفقهية
     today_snippet = DAILY_FIQH_SNIPPETS[int(time.time() / 86400) % len(DAILY_FIQH_SNIPPETS)]
     st.markdown(f"""
     <div class="daily-card">
         <span class="daily-badge">💡 مسألة اليوم الفقهية</span>
         <h4 style="color:#fbbf24; margin:0.3rem 0; font-size:1.1rem;">{today_snippet['topic']}</h4>
-        <p style="color:#e2e8f0; font-size:0.95rem; margin:0; line-height:1.7;">{today_snippet['text']}</p>
+        <p style="color:#e2e8f0; font-size:0.95rem; margin:0; line-height:1.7;">{format_quranic_text(today_snippet['text'])}</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -903,7 +937,7 @@ elif st.session_state["active_view"] == "fiqh":
         if msg["role"] == "user":
             st.markdown(f"<div style='background:rgba(30,58,138,0.35); border:1px solid rgba(59,130,246,0.4); border-radius:14px; padding:0.9rem; margin-bottom:0.7rem;'>👤 <strong>السؤال:</strong> {msg['content']}</div>", unsafe_allow_html=True)
         else:
-            st.markdown(f"<div style='background:rgba(15,23,42,0.9); border:1.5px solid rgba(234,179,8,0.45); border-radius:14px; padding:1.1rem; margin-bottom:1.1rem;'>🕌 <strong>البيان الفقهي:</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='background:rgba(15,23,42,0.9); border:1.5px solid rgba(234,179,8,0.45); border-radius:14px; padding:1.1rem; margin-bottom:1.1rem;'>🕌 <strong>البيان الفقهي:</strong><br>{format_quranic_text(msg['content'])}</div>", unsafe_allow_html=True)
 
     chat_input = st.text_input("اكتب استفسارك الفقهي هنا:", placeholder="مثال: حكم صلاة الوتر وصفتها؟ وهل تجوز بركعة واحدة؟...", key="chat_fiqh_input")
     
@@ -930,7 +964,7 @@ elif st.session_state["active_view"] == "fiqh":
             if send_matrix:
                 chat_sys = """أنت محقق فقهي مقارن. اعرض حكم المسألة بدقة تامة في جدول مصفوفي مفصل يشمل 4 أعمدة للمذاهب الأربعة:
 | الحنفي | المالكي | الشافعي | الحنبلي |
-مع ذكر المعتمد وموطن الاتفاق والخلاف بالأدلة المعتمدة بالعربية فقط."""
+مع وضع نصوص الآيات القرآنية بين علامتي « ... » بالعربية فقط."""
             else:
                 chat_sys = f"""
 أنت مفتٍ ومحاور فقهي ومحدث محقق.
@@ -939,7 +973,7 @@ elif st.session_state["active_view"] == "fiqh":
 
 هيكل الإجابة المطلوب بالعربية الفصحى فقط:
 # 📌 خلاصة الحكم الشرعي المباشر
-# 📖 الاستدلال من القرآن الكريم والسنة النبوية
+# 📖 الاستدلال من القرآن الكريم والسنة النبوية (ضع الآيات بين « ... »)
 # 🏛️ أقوال الأئمة والمذاهب المعتمدة
 # 💡 توجيه وإرشاد تطبيقي
 """
@@ -956,7 +990,7 @@ elif st.session_state["active_view"] == "fiqh":
         st.markdown("---")
         with st.expander("⚡ خلاصة الفتوى السريعة في سطرين (للمستفتي المتعجل)", expanded=False):
             first_lines = "\n".join([line for line in last_a.split("\n") if line.strip() and not line.startswith("#")][:3])
-            st.markdown(f"<div class='summary-pill-card'>⚖️ <strong>الخلاصة المباشرة:</strong><br>{first_lines}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='summary-pill-card'>⚖️ <strong>الخلاصة المباشرة:</strong><br>{format_quranic_text(first_lines)}</div>", unsafe_allow_html=True)
 
         chosen_tag = st.selectbox("🏷️ اختر وسم الفتوى للحفظ:", ["#عبادات_وصلاة", "#معاملات_ومال", "#صيام_وزكاة", "#أحوال_شخصية", "#فقه_عام"])
         col_fb1, col_fb2 = st.columns(2)
@@ -1000,7 +1034,7 @@ elif st.session_state["active_view"] == "hadith":
             h_output = st.empty()
             h_sys = """
 أنت عالم ومحدث محقق في علوم الحديث والجرح والتعديل.
-قم بتخريج الحديث باللغة العربية الفصحى حصراً وبدون أي كلمة أجنبية:
+قم بتخريج الحديث باللغة العربية الفصحى حصراً وبدون أي كلمة أجنبية (ضع الآيات بين « ... »):
 # 📜 بطاقة تخريج الحديث النبوي
 - **نص المتن الصحيح**: «النص مع الضبط»
 - 👤 **الصحابي راوي الحديث**:
@@ -1037,7 +1071,7 @@ elif st.session_state["active_view"] == "hadith":
             t_output = st.empty()
             t_sys = """
 أنت معجمي وفقهي محقق.
-اشرح المصطلح الشرعي باللغة العربية الفصحى فقط وبشكل دقيق:
+اشرح المصطلح الشرعي باللغة العربية الفصحى فقط وبشكل دقيق (ضع الآيات بين « ... »):
 # 📖 بيان المصطلح الشرعي
 - **المعنى اللغوي والاصطلاحي**:
 - **المقدار المعاصر (إن وجد)**:
@@ -1086,9 +1120,8 @@ elif st.session_state["active_view"] == "quran":
             q_output = st.empty()
             q_sys = """
 أنت عالم مفسر ومحقق في التفسير الموضوعي وعلوم القرآن.
-استخرج الآيات واشرحها باللغة العربية الفصحى فقط:
+استخرج الآيات واشرحها باللغة العربية الفصحى فقط وضع نصوص الآيات بدقة بين علامتي « ... »:
 # 📖 الآيات القرآنية ذات الصلة بالموضوع
-اذكر نصوص الآيات مع اسم السورة ورقم الآية:
 - «نص الآية الكريمة» [السورة: رقم الآية]
 
 # 💡 التفسير الميسر وأسباب النزول
@@ -1203,7 +1236,6 @@ elif st.session_state["active_view"] == "calc":
             results = calculate_inheritance_engine(estate_val, deceased_gender, has_spouse, sons_count, daughters_count, has_father, has_mother)
             st.session_state["estate_results_cache"] = results
             
-            # الشجرة البصرية للتركة
             st.markdown("### 🌳 شجرة توزيع الميراث البصرية:")
             col_tree1, col_tree2 = st.columns(2)
             with col_tree1:
@@ -1237,7 +1269,7 @@ elif st.session_state["active_view"] == "calc":
 - الأب: {'نعم' if has_father else 'لا'}
 - الأم: {'نعم' if has_mother else 'لا'}
 
-قم بذكر الآيات القرآنية من سورة النساء الصريحة في قسمة هذه التركة، وبيان حالات الحجب بقواعد علم الفرائض باللغة العربية الفصحى فقط.
+قم بذكر الآيات القرآنية من سورة النساء الصريحة في قسمة هذه التركة، وبيان حالات الحجب بقواعد علم الفرائض باللغة العربية الفصحى فقط (ضع الآيات بين « ... »).
 """
             estate_sys = """أنت فقيه ومحقق في علم الفرائض. اذكر نصوص الآيات من سورة النساء التي استندت إليها هذه المسألة وبيان سبب حجب الحواشي بالعربية فقط."""
             m_out = st.empty()
@@ -1409,9 +1441,9 @@ elif st.session_state["active_view"] == "quiz":
                 if chosen_answer == q_data["correct"]:
                     st.session_state["quiz_score"] += 1
                     st.session_state["stats"]["quiz_correct_answered"] += 1
-                    st.session_state["quiz_feedback"] = {"status": "success", "msg": f"🎉 **إجابة صحيحة وموفقة!**\n\n📖 **الدليل والتحقيق:** {q_data['proof']}"}
+                    st.session_state["quiz_feedback"] = {"status": "success", "msg": f"🎉 **إجابة صحيحة وموفقة!**\n\n📖 **الدليل والتحقيق:** {format_quranic_text(q_data['proof'])}"}
                 else:
-                    st.session_state["quiz_feedback"] = {"status": "error", "msg": f"❌ **إجابة غير صحيحة.**\n\n📌 **الصواب هو:** {q_data['correct']}\n\n📖 **الدليل:** {q_data['proof']}"}
+                    st.session_state["quiz_feedback"] = {"status": "error", "msg": f"❌ **إجابة غير صحيحة.**\n\n📌 **الصواب هو:** {q_data['correct']}\n\n📖 **الدليل:** {format_quranic_text(q_data['proof'])}"}
                 st.rerun()
                 
         if st.session_state["quiz_feedback"]:
@@ -1466,7 +1498,6 @@ elif st.session_state["active_view"] == "bookmarks":
     </div>
     """, unsafe_allow_html=True)
 
-    # قسم النسخ الاحتياطي والمزامنة JSON
     with st.expander("🔄 النسخ الاحتياطي ونقل البيانات (JSON Sync)", expanded=False):
         st.markdown("<p style='color:#94a3b8; font-size:0.9rem;'>يمكنك تحميل نسخة احتياطية من كل فتاواك المحفوظة وإحصائياتك ونقلها لأي جهاز آخر بسهولة:</p>", unsafe_allow_html=True)
         backup_dict = {
@@ -1544,7 +1575,7 @@ elif st.session_state["active_view"] == "bookmarks":
         for idx, bmark in enumerate(filtered_bmarks):
             with st.expander(f"📌 {bmark['question']} ({bmark['tag']}) - {bmark['date']}"):
                 st.markdown(f"<span style='background:rgba(217,119,6,0.2); color:#fbbf24; border:1px solid #f59e0b; border-radius:8px; padding:2px 8px; font-weight:bold;'>{bmark['tag']}</span>", unsafe_allow_html=True)
-                st.markdown(bmark["answer"])
+                st.markdown(format_quranic_text(bmark["answer"]), unsafe_allow_html=True)
                 st.download_button(
                     label="📄 تحميل هذه الفتوى (PDF)",
                     data=create_printable_html(bmark['question'], bmark['answer']),
