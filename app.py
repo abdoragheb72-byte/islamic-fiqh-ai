@@ -4,6 +4,8 @@ import html
 import time
 import json
 import random
+import csv
+import io
 import streamlit as st
 from groq import Groq
 import copy
@@ -14,7 +16,7 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
-# 2. تخصيص واجهة المستخدم الملكية
+# 2. تخصيص واجهة المستخدم الملكية الفاخرة
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@700&family=Cairo:wght@400;600;700;800;900&display=swap');
@@ -58,6 +60,25 @@ st.markdown("""
         margin: 0;
         line-height: 1.6;
         text-shadow: 0 0 12px rgba(254, 240, 138, 0.25);
+    }
+    .daily-card {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.95) 100%);
+        border: 1px solid rgba(234, 179, 8, 0.4);
+        border-radius: 18px;
+        padding: 1.1rem;
+        margin-bottom: 1.3rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+    .daily-badge {
+        background: rgba(234, 179, 8, 0.2);
+        color: #facc15;
+        border: 1px solid rgba(234, 179, 8, 0.5);
+        padding: 2px 8px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 800;
+        display: inline-block;
+        margin-bottom: 0.5rem;
     }
     
     .royal-hero {
@@ -199,6 +220,22 @@ st.markdown("""
         border: 1px solid rgba(234, 179, 8, 0.35) !important;
         padding: 8px 12px !important;
     }
+    .summary-pill-card {
+        background: linear-gradient(90deg, rgba(234, 179, 8, 0.15) 0%, rgba(30, 41, 59, 0.8) 100%);
+        border: 1.5px solid #fbbf24;
+        border-radius: 14px;
+        padding: 0.9rem 1.1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 20px rgba(251, 191, 36, 0.15);
+    }
+    .badge-tier-card {
+        background: linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
+        border: 1.5px solid #fbbf24;
+        border-radius: 16px;
+        padding: 1rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
     .quiz-card {
         background: rgba(15, 23, 42, 0.9);
         border: 1.5px solid #fbbf24;
@@ -273,7 +310,13 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-# 3. بنك الأسئلة الموسع الأصلي
+# 3. بنك المسائل اليومية وبنك الأسئلة
+DAILY_FIQH_SNIPPETS = [
+    {"topic": "حكم سجود السهو للمأموم إذا سها إمامه", "text": "إذا سها الإمام وسجد للسهو، وجب على المأموم متابعته سواء سجد قبل السلام أو بعده، لقوله ﷺ: «إنما جُعل الإمام ليؤتم به فلا تختلفوا عليه»."},
+    {"topic": "قضاء صيام التطوع إذا قطعه الصائم", "text": "ذهب جمهور العلماء (الشافعية والحنابلة) إلى أن صيام التطوع لا يجب قضاؤه إذا أفطر الصائم، لقوله ﷺ: «الصائم المتطوع أمير نفسه إن شاء صام وإن شاء أفطر»."},
+    {"topic": "حكم بيع الذهب القديم بجديد مع دفع الفرق", "text": "لا يجوز بيع ذهب بذهب مع دفع الفارق؛ بل الواجب شرعاً بيع الذهب القديم وقبض ثمنه نقداً، ثم شراء الذهب الجديد بصفقة منفصلة منعاً للوقوع في ربا الفضل."},
+    {"topic": "حكم قراءة القرآن من الهاتف بغير وضوء", "text": "يجوز لمس شاشة الهاتف وقراءة القرآن منه بغير وضوء، لأن شاشة الهاتف لا تأخذ حكم المصحف الورقي الورقي الذي يحرم مسه للمحدث."}
+]
 EXPANDED_QUIZ_DATABASE = {
     "المستوى الأول: المبتدئ (فقه العبادات الأساسي) 🟢": [
         {"question": "ما حكم قراءة سورة الفاتحة للإمام والمنفرد في الصلاة المفروضة؟", "options": ["ركن لا تصح الصلاة إلا به", "سنة مستحبة وتصح الصلاة بدونها", "واجب يجبره سجود السهو"], "correct": "ركن لا تصح الصلاة إلا به", "proof": "لقول النبي ﷺ: «لا صلاةَ لمَن لم يقرَأْ بفاتحةِ الكتابِ» (متفق عليه)."},
@@ -484,7 +527,7 @@ def calculate_inheritance_engine(estate, deceased_gender, has_spouse, sons, daug
     elif has_father and "الأب" not in shares:
         shares["الأب"] = {"fraction": "عصبة بالنفس", "value": remainder, "note": "يحوز باقي التركة تعصيباً لانعدام الفرع الوارث"}
     return shares
-# 7. دالة توليد صفحة PDF / الطباعة المنسقة الشاملة
+# 7. دالة توليد صفحة PDF / الطباعة وتصدير CSV
 def create_printable_html(title: str, content: str) -> str:
     html_content = f"""
     <!DOCTYPE html>
@@ -539,6 +582,25 @@ def create_printable_html(title: str, content: str) -> str:
     </html>
     """
     return html_content
+def generate_estate_csv(estate_total, shares_dict):
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["الوارث الشرعي", "الفرض / الحالة الشرعية", "النصيب المستحق (ج.م)", "تفصيل وسند التوزيع"])
+    for k, v in shares_dict.items():
+        writer.writerow([k, v['fraction'], f"{v['value']:.2f}", v['note']])
+    writer.writerow([])
+    writer.writerow(["إجمالي التركة المالية", "", f"{estate_total:.2f} ج.م", ""])
+    return output.getvalue().encode('utf-8-sig')
+def get_user_mastery_tier(score, total_answered):
+    if total_answered < 5:
+        return "🌱 طالب علم مبتدئ", "#94a3b8"
+    accuracy = (score / total_answered) * 100 if total_answered > 0 else 0
+    if accuracy >= 85 and total_answered >= 15:
+        return "👑 مفتٍ ومحقق معتمد", "#fbbf24"
+    elif accuracy >= 65:
+        return "📜 باحث فقهي متمكن", "#38bdf8"
+    else:
+        return "📖 مجتهد في طلب العلم", "#4ade80"
 # 8. إدارة حالة الجلسة والتنقل
 if "active_view" not in st.session_state:
     st.session_state["active_view"] = "home"
@@ -573,6 +635,8 @@ if "zakah_pdf_doc" not in st.session_state:
     st.session_state["zakah_pdf_doc"] = ""
 if "estate_pdf_doc" not in st.session_state:
     st.session_state["estate_pdf_doc"] = ""
+if "estate_csv_data" not in st.session_state:
+    st.session_state["estate_csv_data"] = None
 if "quiz_pool" not in st.session_state:
     st.session_state["quiz_pool"] = copy.deepcopy(EXPANDED_QUIZ_DATABASE)
 if "quiz_level" not in st.session_state:
@@ -624,12 +688,21 @@ st.markdown("""
     <p class="dhikr-text">✨ سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ • اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَىٰ نَبِيِّنَا مُحَمَّدٍ ✨</p>
 </div>
 """, unsafe_allow_html=True)
-# ----------------- الشاشة الرئيسية: الأيقونات الدائرية الفخمة -----------------
+# ----------------- الشاشة الرئيسية: الأيقونات الدائرية والمسألة اليومية -----------------
 if st.session_state["active_view"] == "home":
     st.markdown("""
     <div class="royal-hero">
         <h1>🕌 الموسوعة الفقهية والحديثية</h1>
         <p>البوابة الرقمية الشاملة للأحكام الشرعية وتخريج السنة النبوية</p>
+    </div>
+    """, unsafe_allow_html=True)
+    # ركن مسألة اليوم الفقهية
+    today_snippet = DAILY_FIQH_SNIPPETS[int(time.time() / 86400) % len(DAILY_FIQH_SNIPPETS)]
+    st.markdown(f"""
+    <div class="daily-card">
+        <span class="daily-badge">💡 مسألة اليوم الفقهية</span>
+        <h4 style="color:#fbbf24; margin:0.3rem 0; font-size:1.1rem;">{today_snippet['topic']}</h4>
+        <p style="color:#e2e8f0; font-size:0.95rem; margin:0; line-height:1.7;">{today_snippet['text']}</p>
     </div>
     """, unsafe_allow_html=True)
     col1, col2 = st.columns(2)
@@ -738,7 +811,11 @@ elif st.session_state["active_view"] == "fiqh":
         last_q = [m["content"] for m in st.session_state["chat_messages"] if m["role"] == "user"][-1]
         last_a = st.session_state["chat_messages"][-1]["content"]
         
+        # كبسولة الخلاصة الفقهية السريعة
         st.markdown("---")
+        with st.expander("⚡ خلاصة الفتوى السريعة في سطرين (للمستفتي المتعجل)", expanded=False):
+            first_lines = "\n".join([line for line in last_a.split("\n") if line.strip() and not line.startswith("#")][:3])
+            st.markdown(f"<div class='summary-pill-card'>⚖️ <strong>الخلاصة المباشرة:</strong><br>{first_lines}</div>", unsafe_allow_html=True)
         chosen_tag = st.selectbox("🏷️ اختر وسم الفتوى للحفظ:", ["#عبادات_وصلاة", "#معاملات_ومال", "#صيام_وزكاة", "#أحوال_شخصية", "#فقه_عام"])
         col_fb1, col_fb2 = st.columns(2)
         with col_fb1:
@@ -880,7 +957,7 @@ elif st.session_state["active_view"] == "quran":
             mime="text/html",
             use_container_width=True
         )
-# ----------------- 4. شاشة الزكاة والمواريث -----------------
+# ----------------- 4. شاشة الزكاة والمواريث مع تصدير Excel / CSV -----------------
 elif st.session_state["active_view"] == "calc":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
     if st.button("⬅️ العودة للرئيسية", use_container_width=True):
@@ -890,7 +967,7 @@ elif st.session_state["active_view"] == "calc":
     st.markdown("""
     <div class="royal-hero">
         <h1>⚖️ حاسبة الزكاة والمواريث (بالجنيه المصري)</h1>
-        <p>عيارات الذهب (24، 21، 18) • حساب قطعي 100% • قسمة التركات</p>
+        <p>عيارات الذهب (24، 21، 18) • حساب قطعي 100% • تصدير Excel و PDF</p>
     </div>
     """, unsafe_allow_html=True)
     calc_sub_type = st.radio("اختر العملية الحسابية:", ["💰 حساب زكاة المال والذهب", "👨‍👩‍👧‍👦 توزيع التركات والمواريث"], horizontal=True)
@@ -972,6 +1049,8 @@ elif st.session_state["active_view"] == "calc":
                 text_summary += f"- {k}: {v['value']:,.2f} ج.م ({v['fraction']}) - {v['note']}\n"
             st.markdown(table_md)
             
+            # تجهيز بيانات CSV للتحميل
+            st.session_state["estate_csv_data"] = generate_estate_csv(estate_val, results)
             estate_prompt = f"""
 المتوفى: {deceased_gender}
 قيمة التركة: {estate_val:,.2f} جنيه مصري
@@ -990,14 +1069,25 @@ elif st.session_state["active_view"] == "calc":
                 st.session_state["estate_pdf_doc"] = f"{text_summary}\n\nالتأصيل الفقهي والقرآني:\n{res_fiqh}"
         st.markdown("</div>", unsafe_allow_html=True)
         if st.session_state["estate_pdf_doc"]:
-            st.download_button(
-                label="📄 تصدير / طباعة جدول المواريث (PDF)",
-                data=create_printable_html("وثيقة توزيع المواريث والفرائض", st.session_state["estate_pdf_doc"]),
-                file_name="inheritance_document.html",
-                mime="text/html",
-                use_container_width=True
-            )
-# ----------------- 5. شاشة المسابقات والتحديات -----------------
+            col_exp1, col_exp2 = st.columns(2)
+            with col_exp1:
+                st.download_button(
+                    label="📄 تصدير تقرير (PDF)",
+                    data=create_printable_html("وثيقة توزيع المواريث والفرائض", st.session_state["estate_pdf_doc"]),
+                    file_name="inheritance_document.html",
+                    mime="text/html",
+                    use_container_width=True
+                )
+            with col_exp2:
+                if st.session_state["estate_csv_data"]:
+                    st.download_button(
+                        label="📊 تصدير جدول (Excel/CSV)",
+                        data=st.session_state["estate_csv_data"],
+                        file_name="inheritance_table.csv",
+                        mime="text/csv",
+                        use_container_width=True
+                    )
+# ----------------- 5. شاشة المسابقات مع نظام الرتب والأوسمة -----------------
 elif st.session_state["active_view"] == "quiz":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
     if st.button("⬅️ العودة للرئيسية", use_container_width=True):
@@ -1007,7 +1097,15 @@ elif st.session_state["active_view"] == "quiz":
     st.markdown("""
     <div class="royal-hero">
         <h1>🏆 بنك المسابقات والتحديات</h1>
-        <p>اختبر معلوماتك الشرعية • مستويات تدريجية • تصحيح فوري</p>
+        <p>اختبر معلوماتك الشرعية • مستويات تدريجية • أوسمة ورتب علمية</p>
+    </div>
+    """, unsafe_allow_html=True)
+    # كارت الرتبة العلمية للمستخدم
+    tier_title, tier_color = get_user_mastery_tier(st.session_state["stats"]["quiz_correct_answered"], st.session_state["stats"]["quiz_total_answered"])
+    st.markdown(f"""
+    <div class="badge-tier-card">
+        <div style="font-size:0.9rem; color:#94a3b8;">رتبتك العلمية الحالية:</div>
+        <div style="font-size:1.35rem; font-weight:900; color:{tier_color}; margin-top:0.2rem;">{tier_title}</div>
     </div>
     """, unsafe_allow_html=True)
     selected_level = st.selectbox(
