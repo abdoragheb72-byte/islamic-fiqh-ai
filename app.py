@@ -1,9 +1,9 @@
 import os
 import json
 import random
-import copy
 import streamlit as st
 from groq import Groq
+import copy
 # إعداد الصفحة
 st.set_page_config(
     page_title="الموسوعة الفقهية والحديثية الذكية",
@@ -11,7 +11,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-# تخصيص واجهة المستخدم
+# تخصيص واجهة المستخدم: حل مشكلة التداخل في الهواتف نهائياً
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@700&family=Cairo:wght@400;600;700;800;900&display=swap');
@@ -27,9 +27,13 @@ st.markdown("""
         direction: rtl;
         overflow-x: hidden !important;
     }
+    
+    /* إخفاء القائمة الجانبية المشوهة للهواتف */
     [data-testid="stSidebar"], [data-testid="collapsedControl"] {
         display: none !important;
     }
+    
+    /* كرت الذكر الثابت */
     .dhikr-card {
         background: linear-gradient(90deg, rgba(234, 179, 8, 0.08) 0%, rgba(234, 179, 8, 0.2) 50%, rgba(234, 179, 8, 0.08) 100%);
         border: 1.5px solid rgba(234, 179, 8, 0.5);
@@ -39,6 +43,7 @@ st.markdown("""
         text-align: center;
         box-shadow: 0 0 20px rgba(234, 179, 8, 0.15);
     }
+    
     .dhikr-text {
         font-family: 'Amiri', serif !important;
         font-size: 1.25rem;
@@ -47,6 +52,8 @@ st.markdown("""
         margin: 0;
         line-height: 1.6;
     }
+    
+    /* الهيدر الملكي */
     .royal-hero {
         background: linear-gradient(135deg, rgba(15, 29, 54, 0.85) 0%, rgba(8, 16, 32, 0.95) 100%);
         border: 2px solid rgba(234, 179, 8, 0.5);
@@ -56,6 +63,7 @@ st.markdown("""
         text-align: center;
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
     }
+    
     .royal-hero h1 {
         font-family: 'Aref Ruqaa', serif !important;
         color: #fbbf24;
@@ -63,12 +71,15 @@ st.markdown("""
         margin-bottom: 0.5rem;
         line-height: 1.3;
     }
+    
     .royal-hero p {
         color: #93c5fd;
         font-size: 1.05rem;
         font-weight: 600;
         margin-bottom: 0;
     }
+    
+    /* التبويبات */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
         background: rgba(15, 29, 54, 0.6);
@@ -76,6 +87,7 @@ st.markdown("""
         border-radius: 14px;
         border: 1px solid rgba(234, 179, 8, 0.3);
     }
+    
     .stTabs [data-baseweb="tab"] {
         border-radius: 10px;
         color: #cbd5e1;
@@ -83,11 +95,14 @@ st.markdown("""
         font-size: 1rem;
         padding: 8px 12px;
     }
+    
     .stTabs [aria-selected="true"] {
         background: linear-gradient(135deg, rgba(234, 179, 8, 0.3) 0%, rgba(234, 179, 8, 0.12) 100%) !important;
         color: #fbbf24 !important;
         border: 1px solid rgba(234, 179, 8, 0.6) !important;
     }
+    
+    /* حقول الإدخال والأزرار */
     .stTextInput>div>div>input, .stTextArea>div>div>textarea {
         background: rgba(15, 29, 54, 0.9) !important;
         color: #ffffff !important;
@@ -97,17 +112,20 @@ st.markdown("""
         font-size: 1.1rem !important;
         font-weight: 600 !important;
     }
+    
     .stRadio label {
         font-size: 1.1rem !important;
         font-weight: 600 !important;
         color: #f1f5f9 !important;
         padding: 4px 0;
     }
+    
     .stSelectbox label, .stMultiSelect label, .stSlider label {
         font-size: 1.1rem !important;
         font-weight: 700 !important;
         color: #facc15 !important;
     }
+    
     .stButton>button {
         background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%) !important;
         color: #ffffff !important;
@@ -118,11 +136,14 @@ st.markdown("""
         padding: 0.75rem 1.5rem !important;
         width: 100%;
     }
+    
+    /* نصوص الإجابات والنتائج */
     .stMarkdown {
         font-size: 1.15rem !important;
         line-height: 2 !important;
         color: #f8fafc !important;
     }
+    
     .stMarkdown h1 {
         font-family: 'Amiri', serif !important;
         color: #fbbf24 !important;
@@ -131,11 +152,13 @@ st.markdown("""
         padding-bottom: 0.4rem !important;
         margin-top: 1.5rem !important;
     }
+    
     .stMarkdown h2, .stMarkdown h3 {
         font-family: 'Amiri', serif !important;
         color: #38bdf8 !important;
         font-size: 1.4rem !important;
     }
+    
     .quiz-card {
         background: rgba(15, 29, 54, 0.95);
         border: 1.5px solid #eab308;
@@ -143,6 +166,7 @@ st.markdown("""
         padding: 1.3rem;
         margin-bottom: 1rem;
     }
+    
     .royal-footer {
         margin-top: 3rem;
         padding: 1.5rem 1rem;
@@ -151,6 +175,7 @@ st.markdown("""
         border-radius: 16px 16px 0 0;
         text-align: center;
     }
+    
     .dev-badge {
         display: inline-block;
         background: rgba(234, 179, 8, 0.18);
@@ -163,29 +188,7 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-# قراءة مفتاح الـ API بأمان تام
-try:
-    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
-except Exception:
-    GROQ_API_KEY = "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"
-def ask_groq(prompt, system_instruction):
-    client = Groq(api_key=GROQ_API_KEY.strip())
-    models = ["llama3-70b-8192", "llama3-8b-8192", "gemma2-9b-it"]
-    for model_name in models:
-        try:
-            res = client.chat.completions.create(
-                model=model_name,
-                messages=[
-                    {"role": "system", "content": system_instruction},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.2
-            )
-            return res.choices[0].message.content.strip()
-        except Exception:
-            continue
-    return "⚠️ تعذر الاتصال بالخادم حالياً، يرجى المحاولة بعد قليل."
-# بنك الأسئلة المدمج الموسع
+# بنك الأسئلة الموسع
 EXPANDED_QUIZ_DATABASE = {
     "المستوى الأول: المبتدئ (فقه العبادات الأساسي) 🟢": [
         {"question": "ما حكم قراءة سورة الفاتحة للإمام والمنفرد في الصلاة المفروضة؟", "options": ["ركن لا تصح الصلاة إلا به", "سنة مستحبة وتصح الصلاة بدونها", "واجب يجبره سجود السهو"], "correct": "ركن لا تصح الصلاة إلا به", "proof": "لقول النبي ﷺ: «لا صلاةَ لمَن لم يقرَأْ بفاتحةِ الكتابِ» (متفق عليه)."},
@@ -208,25 +211,65 @@ EXPANDED_QUIZ_DATABASE = {
         {"question": "ما الفرق بين 'الفرض' و'الواجب' عند السادة الحنفية؟", "options": ["الفرض ما ثبت بدليل قطعي، والواجب ما ثبت بدليل ظني", "الفرض والواجب مترادفان تماماً", "الواجب آكد من الفرض في العقيدة"], "correct": "الفرض ما ثبت بدليل قطعي، والواجب ما ثبت بدليل ظني", "proof": "يميز الحنفية بين الفرض (كالصلاة بالدليل القطعي) والواجب (كالوتر بالدليل الظني)."}
     ]
 }
+# قراءة مفتاح Groq بأمان تام
+try:
+    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+except Exception:
+    GROQ_API_KEY = "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"
+def get_working_groq_models():
+    client = Groq(api_key=GROQ_API_KEY.strip())
+    try:
+        models_data = client.models.list()
+        return [m.id for m in models_data.data if m.active]
+    except Exception:
+        return ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "llama3-70b-8192", "llama3-8b-8192"]
+def execute_groq_prompt(prompt, system_inst, output_container):
+    client = Groq(api_key=GROQ_API_KEY.strip())
+    models_to_try = get_working_groq_models()
+    
+    full_text = ""
+    for model_choice in models_to_try:
+        try:
+            completion = client.chat.completions.create(
+                model=model_choice,
+                messages=[
+                    {"role": "system", "content": system_inst},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.1,
+                stream=True
+            )
+            for chunk in completion:
+                chunk_content = chunk.choices[0].delta.content
+                if chunk_content:
+                    full_text += chunk_content
+                    output_container.markdown(f"<br>{full_text}▌", unsafe_allow_html=True)
+            output_container.markdown(f"<br>{full_text}", unsafe_allow_html=True)
+            return full_text
+        except Exception:
+            continue
+    return None
 def generate_dynamic_quiz_questions(level_name):
     client = Groq(api_key=GROQ_API_KEY.strip())
-    sys_prompt = """أنت محرك فقهي ومحدث محقق. ولد 8 أسئلة شرعية جديدة بصيغة اختيار من متعدد بالعربية.
+    models_to_try = get_working_groq_models()
+    
+    sys_prompt = """أنت محرك فقهي ومحدث محقق. ولد 10 أسئلة شرعية جديدة ومتنوعة تماماً بصيغة اختيار من متعدد بالعربية.
 اكتب كل سؤال في سطر منفصل بالضبط وفق هذا النموذج مستخدماً الرمز ||| للفصل:
 نص السؤال ||| الإجابة الصحيحة ||| الخيار الخطأ الأول ||| الخيار الخطأ الثاني ||| الدليل والتخريج الشرعي
 تنبيه: لا تكتب أي مقدمات أو أرقام، فقط الأسطر المفصولة بالعلامة |||."""
-    models = ["llama3-70b-8192", "llama3-8b-8192", "gemma2-9b-it"]
-    for model_name in models:
+    for model_choice in models_to_try:
         try:
             completion = client.chat.completions.create(
-                model=model_name,
+                model=model_choice,
                 messages=[
                     {"role": "system", "content": sys_prompt},
-                    {"role": "user", "content": f"ولد 8 أسئلة للمستوى: {level_name}"}
+                    {"role": "user", "content": f"ولد 10 أسئلة شرعية جديدة تماماً للمستوى: {level_name}"}
                 ],
                 temperature=0.7
             )
             content = completion.choices[0].message.content.strip()
             parsed_questions = []
+            
             for line in content.split("\n"):
                 line = line.strip()
                 if "|||" in line:
@@ -242,14 +285,9 @@ def generate_dynamic_quiz_questions(level_name):
                 return parsed_questions
         except Exception:
             continue
+            
     return []
-# إدارة حالة الجلسة
-if "history" not in st.session_state:
-    st.session_state["history"] = []
-if "current_question" not in st.session_state:
-    st.session_state["current_question"] = ""
-if "current_answer" not in st.session_state:
-    st.session_state["current_answer"] = ""
+# إدارة حالة الأسئلة والجلسة
 if "quiz_pool" not in st.session_state:
     st.session_state["quiz_pool"] = copy.deepcopy(EXPANDED_QUIZ_DATABASE)
 if "quiz_level" not in st.session_state:
@@ -289,18 +327,27 @@ def prepare_new_round(level):
     st.session_state["shuffled_options"] = []
 if not st.session_state["current_round_questions"]:
     prepare_new_round(st.session_state["quiz_level"])
-# واجهة التطبيق
+# إدارة السجل الداخلي للجلسة
+if "history" not in st.session_state:
+    st.session_state["history"] = []
+if "current_question" not in st.session_state:
+    st.session_state["current_question"] = ""
+if "current_answer" not in st.session_state:
+    st.session_state["current_answer"] = ""
+# بطاقة الذكر
 st.markdown("""
 <div class="dhikr-card">
     <p class="dhikr-text">✨ سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ • اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَىٰ نَبِيِّنَا مُحَمَّدٍ ✨</p>
 </div>
 """, unsafe_allow_html=True)
+# الهيدر الترحيبي
 st.markdown("""
 <div class="royal-hero">
     <h1>🕌 الموسوعة الفقهية والحديثية الذكية</h1>
     <p>استعراض الأحكام الشرعية • الاستدلال القرآني • تخريج الأحاديث • بنك تحديات عشوائي</p>
 </div>
 """, unsafe_allow_html=True)
+# علامات التبويب الرئيسية
 tab_main, tab_hadith, tab_dict, tab_interactive = st.tabs([
     "🏛️ المحرك الفقهي",
     "📜 التحقيق الحديثي",
@@ -368,18 +415,16 @@ with tab_main:
 ---
 # 💡 توجيه وإرشاد شرعي
 """
-            with st.spinner("جاري استخراج وتحقيق الحكم الشرعي..."):
-                result = ask_groq(query_text, dynamic_system_instruction)
-            
-            output_area.markdown(f"<br>{result}", unsafe_allow_html=True)
-            st.session_state["current_question"] = query_text
-            st.session_state["current_answer"] = result
-            
-            updated_hist = [h for h in st.session_state["history"] if h["question"] != query_text]
-            updated_hist.insert(0, {"question": query_text, "answer": result})
-            st.session_state["history"] = updated_hist[:15]
+            result = execute_groq_prompt(query_text, dynamic_system_instruction, output_area)
+            if result:
+                st.session_state["current_question"] = query_text
+                st.session_state["current_answer"] = result
+                updated_hist = [h for h in st.session_state["history"] if h["question"] != query_text]
+                updated_hist.insert(0, {"question": query_text, "answer": result})
+                st.session_state["history"] = updated_hist[:15]
+    # قسم السجل المنسدل المدمج والأنيق
     if st.session_state["history"]:
-        with st.expander("📜 سجل استفساراتك الأخيرة"):
+        with st.expander("📜 سجل استفساراتك المحفوظة"):
             for idx, item in enumerate(st.session_state["history"]):
                 if st.button(f"📌 {item['question']}", key=f"hist_btn_{idx}", use_container_width=True):
                     st.session_state["current_question"] = item["question"]
@@ -391,6 +436,7 @@ with tab_hadith:
     hadith_input = st.text_input("اكتب نص الحديث المراد تخريجه:", placeholder="مثال: إنما الأعمال بالنيات...")
     if st.button("🔎 تخريج وتحقيق الحديث", use_container_width=True):
         if hadith_input.strip():
+            h_output = st.empty()
             h_sys = """
 أنت عالم ومحدث محقق متمكن في علوم الجرح والتعديل.
 قم بتحقيق الحديث المدخل:
@@ -401,15 +447,14 @@ with tab_hadith:
 - ⚖️ **حكم المحدثين ورتبته**:
 - 💡 **الفائدة المستنبطة من الحديث**:
 """
-            with st.spinner("جاري تخريج الحديث وتحقيقه..."):
-                h_res = ask_groq(hadith_input.strip(), h_sys)
-            st.markdown(f"<br>{h_res}", unsafe_allow_html=True)
+            execute_groq_prompt(hadith_input, h_sys, h_output)
 # ----------------- التبويب 3: معجم غريب الألفاظ -----------------
 with tab_dict:
     st.markdown("<p style='color:#94a3b8;'>شرح دقيق للمصطلحات القديمة، المقادير الشرعية، والألفاظ التراثية الصعبة.</p>", unsafe_allow_html=True)
     term_input = st.text_input("اكتب اللفظ أو المصطلح الشرعي:", placeholder="مثال: الصاع، العول، الكلالة، القسامة...")
     if st.button("📚 شرح وتفسير المصطلح", use_container_width=True):
         if term_input.strip():
+            t_output = st.empty()
             t_sys = """
 أنت معجمي وفقهي محقق.
 اشرح المصطلح الشرعي:
@@ -418,9 +463,7 @@ with tab_dict:
 - **المقدار المعاصر (إن وجد)**:
 - **أمثلة وتطبيقات فقهية**:
 """
-            with st.spinner("جاري بيان وتفسير المصطلح..."):
-                t_res = ask_groq(term_input.strip(), t_sys)
-            st.markdown(f"<br>{t_res}", unsafe_allow_html=True)
+            execute_groq_prompt(term_input, t_sys, t_output)
 # ----------------- التبويب 4: بنك المسابقات والتحديات -----------------
 with tab_interactive:
     st.markdown("<h3 style='color:#fbbf24; font-size:1.6rem;'>🏆 بنك المسابقات والتحديات الفقهية</h3>", unsafe_allow_html=True)
