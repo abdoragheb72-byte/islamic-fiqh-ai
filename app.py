@@ -316,7 +316,7 @@ def fetch_egypt_gold_silver_prices():
     except Exception:
         pass
     return default_prices
-# 6. دوال الفلترة والتنفيذ المباشر المستقر (بدون مشاكل الـ Stream)
+# 6. دوال الفلترة واستدعاء النماذج الفعالة
 def sanitize_user_input(text: str, max_chars: int = 500) -> str:
     if not text:
         return ""
@@ -324,10 +324,15 @@ def sanitize_user_input(text: str, max_chars: int = 500) -> str:
     cleaned = html.escape(cleaned)
     cleaned = re.sub(r'\s+', ' ', cleaned).strip()
     return cleaned[:max_chars]
+# قائمة النماذج الرسمية والمتاحة بدون أخطاء 404
+AVAILABLE_MODELS = [
+    "llama-3.1-8b-instant",
+    "llama3-70b-8192",
+    "llama3-8b-8192",
+    "mixtral-8x7b-32768"
+]
 def execute_groq_prompt(prompt, system_inst):
     client = get_groq_client()
-    models = ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"]
-    
     guarded_system_prompt = f"""
 {system_inst}
 [قواعد لغوية وشرعية إلزامية وصارمة]:
@@ -337,7 +342,7 @@ def execute_groq_prompt(prompt, system_inst):
 4. أجب بشكل كامل ودقيق ومفصل دون بتر للنص.
 """
     last_err = ""
-    for model_choice in models:
+    for model_choice in AVAILABLE_MODELS:
         try:
             completion = client.chat.completions.create(
                 model=model_choice,
@@ -358,8 +363,6 @@ def execute_groq_prompt(prompt, system_inst):
     return None
 def execute_chat_turn(messages_history, system_inst):
     client = get_groq_client()
-    models = ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"]
-    
     guarded_system_prompt = f"""
 {system_inst}
 [قواعد لغوية وشرعية إلزامية وصارمة]:
@@ -369,7 +372,7 @@ def execute_chat_turn(messages_history, system_inst):
 """
     full_messages = [{"role": "system", "content": guarded_system_prompt}] + messages_history
     last_err = ""
-    for model_choice in models:
+    for model_choice in AVAILABLE_MODELS:
         try:
             completion = client.chat.completions.create(
                 model=model_choice,
@@ -387,14 +390,12 @@ def execute_chat_turn(messages_history, system_inst):
     return None
 def generate_dynamic_quiz_questions(level_name):
     client = get_groq_client()
-    models = ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"]
-    
     sys_prompt = """أنت محرك فقهي ومحدث محقق. ولد 10 أسئلة شرعية جديدة باللغة العربية الفصحى فقط.
 اكتب كل سؤال في سطر منفصل بالضبط وفق هذا النموذج مستخدماً الرمز ||| للفصل:
 نص السؤال ||| الإجابة الصحيحة ||| الخيار الخطأ الأول ||| الخيار الخطأ الثاني ||| الدليل والتخريج الشرعي
 تنبيه: لا تكتب أي مقدمات أو أرقام أو كلمات إنجليزية مطلقاً، فقط الأسطر المفصولة بالعلامة |||."""
     
-    for model_choice in models:
+    for model_choice in AVAILABLE_MODELS:
         try:
             completion = client.chat.completions.create(
                 model=model_choice,
