@@ -14,7 +14,7 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
-# تخصيص واجهة المستخدم الملكية بالأيقونات الدائرية والتصميم الفاخر
+# 2. تخصيص واجهة المستخدم الملكية
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@700&family=Cairo:wght@400;600;700;800;900&display=swap');
@@ -226,6 +226,27 @@ st.markdown("""
         font-size: 0.9rem;
         font-weight: 700;
     }
+    .social-link-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.45rem 0.9rem;
+        margin: 0.25rem;
+        border-radius: 12px;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        font-size: 0.9rem;
+        font-weight: 700;
+        border: 1px solid rgba(234, 179, 8, 0.3);
+        background: rgba(15, 23, 42, 0.7);
+        transition: all 0.2s ease;
+    }
+    .social-link-btn:hover {
+        border-color: #fbbf24;
+        transform: translateY(-2px);
+        background: rgba(30, 41, 59, 0.9);
+        box-shadow: 0 4px 15px rgba(234, 179, 8, 0.2);
+    }
     .royal-footer {
         margin-top: 3rem;
         padding: 1.6rem 1rem;
@@ -252,7 +273,7 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-# 2. بنك الأسئلة الموسع الأصلي
+# 3. بنك الأسئلة الموسع الأصلي
 EXPANDED_QUIZ_DATABASE = {
     "المستوى الأول: المبتدئ (فقه العبادات الأساسي) 🟢": [
         {"question": "ما حكم قراءة سورة الفاتحة للإمام والمنفرد في الصلاة المفروضة؟", "options": ["ركن لا تصح الصلاة إلا به", "سنة مستحبة وتصح الصلاة بدونها", "واجب يجبره سجود السهو"], "correct": "ركن لا تصح الصلاة إلا به", "proof": "لقول النبي ﷺ: «لا صلاةَ لمَن لم يقرَأْ بفاتحةِ الكتابِ» (متفق عليه)."},
@@ -269,12 +290,12 @@ EXPANDED_QUIZ_DATABASE = {
         {"question": "ما الفرق بين 'الفرض' و'الواجب' عند السادة الحنفية؟", "options": ["الفرض ما ثبت بدليل قطعي، والواجب ما ثبت بدليل ظني", "الفرض والواجب مترادفان تماماً", "الواجب آكد من الفرض في العقيدة"], "correct": "الفرض ما ثبت بدليل قطعي، والواجب ما ثبت بدليل ظني", "proof": "يميز الحنفية بين الفرض (كالصلاة بالدليل القطعي) والواجب (كالوتر بالدليل الظني)."}
     ]
 }
-# 3. قراءة مفتاح Groq الأصلي دون تغيير
+# 4. قراءة مفتاح Groq الأصلي
 try:
     GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 except Exception:
     GROQ_API_KEY = "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"
-# 4. دوال الفلترة والأمان الأصلية
+# 5. دوال الفلترة والأمان الأصلية
 def sanitize_user_input(text: str, max_chars: int = 500) -> str:
     if not text:
         return ""
@@ -407,7 +428,7 @@ def generate_dynamic_quiz_questions(level_name):
             continue
             
     return []
-# 5. دوال محرك المواريث والزكاة الحسابية القطعية
+# 6. دوال محرك المواريث والزكاة الحسابية القطعية
 def calculate_inheritance_engine(estate, deceased_gender, has_spouse, sons, daughters, has_father, has_mother):
     shares = {}
     has_children = (sons + daughters) > 0
@@ -463,7 +484,7 @@ def calculate_inheritance_engine(estate, deceased_gender, has_spouse, sons, daug
     elif has_father and "الأب" not in shares:
         shares["الأب"] = {"fraction": "عصبة بالنفس", "value": remainder, "note": "يحوز باقي التركة تعصيباً لانعدام الفرع الوارث"}
     return shares
-# 6. دالة توليد صفحة PDF / الطباعة المنسقة
+# 7. دالة توليد صفحة PDF / الطباعة المنسقة الشاملة
 def create_printable_html(title: str, content: str) -> str:
     html_content = f"""
     <!DOCTYPE html>
@@ -518,7 +539,7 @@ def create_printable_html(title: str, content: str) -> str:
     </html>
     """
     return html_content
-# 7. إدارة حالة الجلسة والتنقل
+# 8. إدارة حالة الجلسة والتنقل
 if "active_view" not in st.session_state:
     st.session_state["active_view"] = "home"
 if "last_request_time" not in st.session_state:
@@ -536,6 +557,22 @@ if "chat_messages" not in st.session_state:
     st.session_state["chat_messages"] = []
 if "bookmarks" not in st.session_state:
     st.session_state["bookmarks"] = []
+if "hadith_result" not in st.session_state:
+    st.session_state["hadith_result"] = ""
+if "hadith_query_saved" not in st.session_state:
+    st.session_state["hadith_query_saved"] = ""
+if "dict_result" not in st.session_state:
+    st.session_state["dict_result"] = ""
+if "dict_query_saved" not in st.session_state:
+    st.session_state["dict_query_saved"] = ""
+if "quran_result" not in st.session_state:
+    st.session_state["quran_result"] = ""
+if "quran_query_saved" not in st.session_state:
+    st.session_state["quran_query_saved"] = ""
+if "zakah_pdf_doc" not in st.session_state:
+    st.session_state["zakah_pdf_doc"] = ""
+if "estate_pdf_doc" not in st.session_state:
+    st.session_state["estate_pdf_doc"] = ""
 if "quiz_pool" not in st.session_state:
     st.session_state["quiz_pool"] = copy.deepcopy(EXPANDED_QUIZ_DATABASE)
 if "quiz_level" not in st.session_state:
@@ -710,7 +747,7 @@ elif st.session_state["active_view"] == "fiqh":
                 st.success("✅ تم الحفظ بنجاح في هاتفك!")
         with col_fb2:
             st.download_button(
-                label="📄 طباعة الفتوى (PDF)",
+                label="📄 طباعة وحفظ الفتوى (PDF)",
                 data=create_printable_html(last_q, last_a),
                 file_name="fatwa_document.html",
                 mime="text/html",
@@ -751,8 +788,18 @@ elif st.session_state["active_view"] == "hadith":
 """
             h_res = execute_groq_prompt(cleaned_hadith, h_sys, h_output)
             if h_res:
+                st.session_state["hadith_result"] = h_res
+                st.session_state["hadith_query_saved"] = cleaned_hadith
                 st.session_state["stats"]["hadith_queries"] += 1
     st.markdown("</div>", unsafe_allow_html=True)
+    if st.session_state["hadith_result"]:
+        st.download_button(
+            label="📄 تصدير / طباعة تحقيق الحديث (PDF)",
+            data=create_printable_html(f"تحقيق حديث: {st.session_state['hadith_query_saved']}", st.session_state["hadith_result"]),
+            file_name="hadith_verification.html",
+            mime="text/html",
+            use_container_width=True
+        )
     st.markdown("---")
     term_input = st.text_input("اكتب اللفظ أو المصطلح الشرعي المراد تفسيره:", max_chars=100, placeholder="مثال: الصاع، العول، الكلالة، القسامة...")
     st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
@@ -774,8 +821,18 @@ elif st.session_state["active_view"] == "hadith":
 """
             t_res = execute_groq_prompt(cleaned_term, t_sys, t_output)
             if t_res:
+                st.session_state["dict_result"] = t_res
+                st.session_state["dict_query_saved"] = cleaned_term
                 st.session_state["stats"]["dict_queries"] += 1
     st.markdown("</div>", unsafe_allow_html=True)
+    if st.session_state["dict_result"]:
+        st.download_button(
+            label="📄 تصدير / طباعة بيان المصطلح (PDF)",
+            data=create_printable_html(f"بيان مصطلح: {st.session_state['dict_query_saved']}", st.session_state["dict_result"]),
+            file_name="term_explanation.html",
+            mime="text/html",
+            use_container_width=True
+        )
 # ----------------- 3. شاشة القرآن والتفسير -----------------
 elif st.session_state["active_view"] == "quran":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
@@ -811,8 +868,18 @@ elif st.session_state["active_view"] == "quran":
 """
             q_res = execute_groq_prompt(cleaned_qtopic, q_sys, q_output)
             if q_res:
+                st.session_state["quran_result"] = q_res
+                st.session_state["quran_query_saved"] = cleaned_qtopic
                 st.session_state["stats"]["quran_queries"] += 1
     st.markdown("</div>", unsafe_allow_html=True)
+    if st.session_state["quran_result"]:
+        st.download_button(
+            label="📄 تصدير / طباعة التفسير القرآني (PDF)",
+            data=create_printable_html(f"التفسير الموضوعي: {st.session_state['quran_query_saved']}", st.session_state["quran_result"]),
+            file_name="quran_interpretation.html",
+            mime="text/html",
+            use_container_width=True
+        )
 # ----------------- 4. شاشة الزكاة والمواريث -----------------
 elif st.session_state["active_view"] == "calc":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
@@ -869,12 +936,22 @@ elif st.session_state["active_view"] == "calc":
 
 """
             st.markdown(z_table)
+            status_text = f"الواجب إخراجه شرعاً: {zakah_due_egp:,.2f} جنيه مصري" if is_nisab_reached else "المال لم يبلغ النصاب الشرعي بعد"
+            st.session_state["zakah_pdf_doc"] = f"تقرير احتساب الزكاة الشرعية\n\nإجمالي الوعاء: {total_wealth_egp:,.2f} ج.م\nحد النصاب: {nisab_in_egp:,.2f} ج.م\nالنتيجة: {status_text}\n\nنسبة الزكاة المقررة: 2.5% (ربع العشر)."
             if is_nisab_reached:
                 st.success(f"✅ **تجب الزكاة شرعاً:** الواجب إخراجه هو **`{zakah_due_egp:,.2f} جنيه مصري`** تُدفع لمصارف الزكاة.")
             else:
                 shortage = nisab_in_egp - total_wealth_egp
                 st.info(f"ℹ️ **لا تجب الزكاة حالياً:** ينقص مالك مبلغ **`{shortage:,.2f} جنيه مصري`** ليصل إلى النصاب.")
         st.markdown("</div>", unsafe_allow_html=True)
+        if st.session_state["zakah_pdf_doc"]:
+            st.download_button(
+                label="📄 تصدير / طباعة بيان الزكاة (PDF)",
+                data=create_printable_html("تقرير حساب الزكاة الشرعية", st.session_state["zakah_pdf_doc"]),
+                file_name="zakah_report.html",
+                mime="text/html",
+                use_container_width=True
+            )
     else:
         estate_val = st.number_input("إجمالي قيمة التركة المالية (بالجنيه المصري):", min_value=100.0, value=500000.0, step=10000.0)
         deceased_gender = st.radio("المتوفى:", ["رجل (ترك زوجة/أولاد)", "امرأة (تركت زوج/أولاد)"], horizontal=True)
@@ -889,8 +966,10 @@ elif st.session_state["active_view"] == "calc":
             results = calculate_inheritance_engine(estate_val, deceased_gender, has_spouse, sons_count, daughters_count, has_father, has_mother)
             st.markdown("### 📊 جدول القسمة الشرعية وتوزيع الأنصبة (بالجنيه المصري):")
             table_md = "| الوارث | الفرض / الحالة الشرعية | النصيب المالي المستحق | تفصيل وسند التوزيع |\n| :--- | :--- | :--- | :--- |\n"
+            text_summary = f"تقرير قسمة التركات والمواريث\nقيمة التركة الإجمالية: {estate_val:,.2f} ج.م\n\nتوزيع الأنصبة:\n"
             for k, v in results.items():
                 table_md += f"| **{k}** | `{v['fraction']}` | **`{v['value']:,.2f} ج.م`** | {v['note']} |\n"
+                text_summary += f"- {k}: {v['value']:,.2f} ج.م ({v['fraction']}) - {v['note']}\n"
             st.markdown(table_md)
             
             estate_prompt = f"""
@@ -906,8 +985,18 @@ elif st.session_state["active_view"] == "calc":
 """
             estate_sys = """أنت فقيه ومحقق في علم الفرائض. اذكر نصوص الآيات من سورة النساء التي استندت إليها هذه المسألة وبيان سبب حجب الحواشي بالعربية فقط."""
             m_out = st.empty()
-            execute_groq_prompt(estate_prompt, estate_sys, m_out)
+            res_fiqh = execute_groq_prompt(estate_prompt, estate_sys, m_out)
+            if res_fiqh:
+                st.session_state["estate_pdf_doc"] = f"{text_summary}\n\nالتأصيل الفقهي والقرآني:\n{res_fiqh}"
         st.markdown("</div>", unsafe_allow_html=True)
+        if st.session_state["estate_pdf_doc"]:
+            st.download_button(
+                label="📄 تصدير / طباعة جدول المواريث (PDF)",
+                data=create_printable_html("وثيقة توزيع المواريث والفرائض", st.session_state["estate_pdf_doc"]),
+                file_name="inheritance_document.html",
+                mime="text/html",
+                use_container_width=True
+            )
 # ----------------- 5. شاشة المسابقات والتحديات -----------------
 elif st.session_state["active_view"] == "quiz":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
@@ -1096,10 +1185,23 @@ elif st.session_state["active_view"] == "bookmarks":
                     mime="text/html",
                     key=f"dl_bmark_{idx}"
                 )
-# 9. التذييل
+# 9. التذييل الفاخر مع روابط التواصل الاجتماعي
 st.markdown("""
 <div class="royal-footer">
-    <div style="color: #9ca3af; margin-bottom: 0.5rem;">نظام فقهي استدلالي وتوثيقي مقارن مبني بنماذج الذكاء الاصطناعي المتقدمة</div>
-    <div>Developed by <span class="dev-badge">Eng. Abdelfttah Ragheb</span> © 2026</div>
+    <div style="color: #9ca3af; margin-bottom: 0.6rem;">نظام فقهي استدلالي وتوثيقي مقارن مبني بنماذج الذكاء الاصطناعي المتقدمة</div>
+    <div style="margin-bottom: 0.9rem;">
+        Developed by <span class="dev-badge">Eng. Abdelfttah Ragheb</span> © 2026
+    </div>
+    <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 6px;">
+        <a href="https://instagram.com/3bdo_ragheb_?igshid=ZDdkNTZiNTM%3D" target="_blank" class="social-link-btn">
+            📸 Instagram
+        </a>
+        <a href="https://www.facebook.com/share/1DP6ShDfxz/" target="_blank" class="social-link-btn">
+            🌐 Facebook
+        </a>
+        <a href="https://wa.me/201153735189" target="_blank" class="social-link-btn">
+            💬 WhatsApp
+        </a>
+    </div>
 </div>
 """, unsafe_allow_html=True)
