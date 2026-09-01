@@ -305,17 +305,11 @@ EXPANDED_QUIZ_DATABASE = {
     ]
 }
 
-# 4. دالة استخراج وتأكيد مفتاح Groq
+# 4. مفتاح الـ API المباشر والمثبت
+GROQ_API_KEY = "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"
+
 def get_groq_client():
-    api_key = None
-    if "GROQ_API_KEY" in st.secrets:
-        api_key = st.secrets["GROQ_API_KEY"]
-    elif "GROQ_API_KEY" in os.environ:
-        api_key = os.environ["GROQ_API_KEY"]
-    else:
-        api_key = "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"
-    
-    return Groq(api_key=str(api_key).strip())
+    return Groq(api_key=GROQ_API_KEY.strip())
 
 # 5. جلب أسعار الذهب والفضة في السوق المصري
 @st.cache_data(ttl=1800, show_spinner=False)
@@ -348,7 +342,7 @@ def fetch_egypt_gold_silver_prices():
         pass
     return default_prices
 
-# 6. دوال الفلترة والأمان وتنفيذ الذكاء الاصطناعي مع معالجة الأخطاء
+# 6. دوال الفلترة والتوليد
 def sanitize_user_input(text: str, max_chars: int = 500) -> str:
     if not text:
         return ""
@@ -404,11 +398,11 @@ def execute_groq_prompt(prompt, system_inst, output_container=None):
                     max_tokens=4096
                 )
                 return completion.choices[0].message.content.strip()
-        except Exception as e:
+        except Exception:
             continue
             
     if output_container:
-        output_container.error("⚠️ حدث خطأ أثناء الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت أو تجديد مفتاح Groq API.")
+        output_container.error("⚠️ حدث خطأ أثناء الاتصال بالخادم، يرجى المحاولة بعد لحظات.")
     return None
 
 def execute_chat_turn(messages_history, system_inst, output_container):
@@ -443,7 +437,7 @@ def execute_chat_turn(messages_history, system_inst, output_container):
                     output_container.markdown(f"<br>{full_text}▌", unsafe_allow_html=True)
             output_container.markdown(f"<br>{full_text}", unsafe_allow_html=True)
             return full_text
-        except Exception as e:
+        except Exception:
             continue
             
     output_container.error("⚠️ تعذر الاتصال بمحرك الذكاء الاصطناعي، يرجى المحاولة بعد لحظات.")
@@ -1211,7 +1205,7 @@ elif st.session_state["active_view"] == "bookmarks":
                     key=f"dl_bmark_{idx}"
                 )
 
-# 9. التذييل
+# 9. التذييل الفاخر
 st.markdown("""
 <div class="royal-footer">
     <div style="color: #9ca3af; margin-bottom: 0.5rem;">نظام فقهي استدلالي وتوثيقي مقارن مبني بنماذج الذكاء الاصطناعي المتقدمة</div>
