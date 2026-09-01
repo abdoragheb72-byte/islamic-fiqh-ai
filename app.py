@@ -8,6 +8,7 @@ import urllib.request
 import streamlit as st
 from groq import Groq
 import copy
+
 # 1. إعداد الصفحة
 st.set_page_config(
     page_title="الموسوعة الفقهية والحديثية الذكية",
@@ -15,6 +16,7 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
+
 # 2. تصميم ملكي حديث بالأيقونات الدائرية الفاخرة
 st.markdown("""
 <style>
@@ -31,15 +33,16 @@ st.markdown("""
         direction: rtl !important;
         overflow-x: hidden !important;
     }
+
     [data-testid="stSidebar"], [data-testid="collapsedControl"] {
         display: none !important;
     }
+
     .main .block-container {
         padding: 1rem 0.8rem 2.5rem 0.8rem !important;
         max-width: 650px !important;
     }
     
-    /* بطاقة الذكر الزجاجية المتوهجة */
     .dhikr-card {
         background: linear-gradient(135deg, rgba(234, 179, 8, 0.1) 0%, rgba(15, 23, 42, 0.6) 100%);
         backdrop-filter: blur(16px);
@@ -62,7 +65,6 @@ st.markdown("""
         text-shadow: 0 0 12px rgba(254, 240, 138, 0.25);
     }
     
-    /* الهيدر الفخم */
     .royal-hero {
         background: linear-gradient(180deg, rgba(30, 27, 75, 0.4) 0%, rgba(15, 23, 42, 0.85) 100%);
         backdrop-filter: blur(20px);
@@ -89,7 +91,7 @@ st.markdown("""
         font-weight: 600;
         margin-bottom: 0;
     }
-    /* كروت الأيقونات الدائرية */
+
     .circle-icon-badge {
         width: 68px;
         height: 68px;
@@ -103,18 +105,20 @@ st.markdown("""
         box-shadow: 0 0 20px rgba(234, 179, 8, 0.35), inset 0 0 10px rgba(234, 179, 8, 0.2);
         transition: all 0.3s ease;
     }
+
     .circle-card-title {
         color: #f8fafc;
         font-weight: 800;
         font-size: 1rem;
         margin-bottom: 0.2rem;
     }
+
     .circle-card-desc {
         color: #94a3b8;
         font-size: 0.8rem;
         line-height: 1.4;
     }
-    /* تخصيص الأزرار الشبكية */
+
     .hub-grid-btn>button {
         background: linear-gradient(145deg, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%) !important;
         border: 1px solid rgba(234, 179, 8, 0.35) !important;
@@ -129,12 +133,13 @@ st.markdown("""
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
         transition: all 0.25s ease !important;
     }
+
     .hub-grid-btn>button:hover {
         transform: translateY(-4px) !important;
         border-color: #fbbf24 !important;
         box-shadow: 0 15px 35px rgba(234, 179, 8, 0.25) !important;
     }
-    /* الحقول والمدخلات */
+
     .stTextInput>div>div>input, .stTextArea>div>div>textarea, .stNumberInput>div>div>input {
         background: rgba(15, 23, 42, 0.85) !important;
         color: #ffffff !important;
@@ -144,15 +149,18 @@ st.markdown("""
         font-size: 1rem !important;
         font-weight: 600 !important;
     }
+
     .stTextInput>div>div>input:focus, .stTextArea>div>div>textarea:focus {
         border-color: #fbbf24 !important;
         box-shadow: 0 0 15px rgba(251, 191, 36, 0.3) !important;
     }
+
     .stRadio label, .stSelectbox label {
         font-size: 1.05rem !important;
         font-weight: 700 !important;
         color: #fbbf24 !important;
     }
+
     .action-submit-btn>button {
         background: linear-gradient(135deg, #f59e0b 0%, #b45309 60%, #78350f 100%) !important;
         color: #ffffff !important;
@@ -165,6 +173,7 @@ st.markdown("""
         margin-top: 0.5rem;
         box-shadow: 0 8px 25px rgba(180, 83, 9, 0.4) !important;
     }
+
     .back-nav-btn>button {
         background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
         border: 1px solid rgba(234, 179, 8, 0.4) !important;
@@ -180,6 +189,7 @@ st.markdown("""
         line-height: 1.9 !important;
         color: #f8fafc !important;
     }
+
     .stMarkdown h1 {
         font-family: 'Amiri', serif !important;
         color: #fbbf24 !important;
@@ -194,6 +204,7 @@ st.markdown("""
         color: #38bdf8 !important;
         font-size: 1.25rem !important;
     }
+
     table {
         width: 100% !important;
         display: block !important;
@@ -202,10 +213,12 @@ st.markdown("""
         border-collapse: collapse !important;
         margin: 1rem 0 !important;
     }
+
     th, td {
         border: 1px solid rgba(234, 179, 8, 0.35) !important;
         padding: 8px 12px !important;
     }
+
     .quiz-card {
         background: rgba(15, 23, 42, 0.9);
         border: 1.5px solid #fbbf24;
@@ -233,6 +246,7 @@ st.markdown("""
         font-size: 0.9rem;
         font-weight: 700;
     }
+
     .market-badge {
         background: rgba(16, 185, 129, 0.15);
         border: 1px solid rgba(16, 185, 129, 0.45);
@@ -244,6 +258,7 @@ st.markdown("""
         display: inline-block;
         margin-bottom: 0.9rem;
     }
+
     .royal-footer {
         margin-top: 3rem;
         padding: 1.6rem 1rem;
@@ -264,12 +279,14 @@ st.markdown("""
         font-weight: 800;
         font-size: 0.95rem;
     }
+
     @media only screen and (max-width: 600px) {
         .royal-hero h1 { font-size: 1.45rem !important; }
         .circle-icon-badge { width: 58px; height: 58px; line-height: 58px; font-size: 1.6rem; }
     }
 </style>
 """, unsafe_allow_html=True)
+
 # 3. بنك الأسئلة الموسع
 EXPANDED_QUIZ_DATABASE = {
     "المستوى الأول: المبتدئ (فقه العبادات الأساسي) 🟢": [
@@ -287,11 +304,19 @@ EXPANDED_QUIZ_DATABASE = {
         {"question": "ما الفرق بين 'الفرض' و'الواجب' عند السادة الحنفية؟", "options": ["الفرض ما ثبت بدليل قطعي، والواجب ما ثبت بدليل ظني", "الفرض والواجب مترادفان تماماً", "الواجب آكد من الفرض في العقيدة"], "correct": "الفرض ما ثبت بدليل قطعي، والواجب ما ثبت بدليل ظني", "proof": "يميز الحنفية بين الفرض (كالصلاة بالدليل القطعي) والواجب (كالوتر بالدليل الظني)."}
     ]
 }
-# 4. قراءة مفتاح Groq
-try:
-    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
-except Exception:
-    GROQ_API_KEY = "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"
+
+# 4. دالة استخراج وتأكيد مفتاح Groq
+def get_groq_client():
+    api_key = None
+    if "GROQ_API_KEY" in st.secrets:
+        api_key = st.secrets["GROQ_API_KEY"]
+    elif "GROQ_API_KEY" in os.environ:
+        api_key = os.environ["GROQ_API_KEY"]
+    else:
+        api_key = "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"
+    
+    return Groq(api_key=str(api_key).strip())
+
 # 5. جلب أسعار الذهب والفضة في السوق المصري
 @st.cache_data(ttl=1800, show_spinner=False)
 def fetch_egypt_gold_silver_prices():
@@ -322,7 +347,8 @@ def fetch_egypt_gold_silver_prices():
     except Exception:
         pass
     return default_prices
-# 6. دوال الفلترة والأمان وحماية التعريب
+
+# 6. دوال الفلترة والأمان وتنفيذ الذكاء الاصطناعي مع معالجة الأخطاء
 def sanitize_user_input(text: str, max_chars: int = 500) -> str:
     if not text:
         return ""
@@ -330,22 +356,23 @@ def sanitize_user_input(text: str, max_chars: int = 500) -> str:
     cleaned = html.escape(cleaned)
     cleaned = re.sub(r'\s+', ' ', cleaned).strip()
     return cleaned[:max_chars]
+
 def execute_groq_prompt(prompt, system_inst, output_container=None):
-    client = Groq(api_key=GROQ_API_KEY.strip())
-    models_to_try = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"]
+    client = get_groq_client()
+    models_to_try = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "llama3-70b-8192", "llama3-8b-8192"]
     
     guarded_system_prompt = f"""
 {system_inst}
+
 [قواعد لغوية وشرعية إلزامية وصارمة]:
 1. التزم باللغة العربية الفصحى الرصينة فقط بنسبة 100%.
 2. يُمنع منعاً باتاً كتابة أي حرف أو كلمة باللغة الإنجليزية أو اللاتينية.
 3. التزم بالعلوم الشرعية الإسلامية المعتمدة واذكر الأدلة من أمهات كتب الفقه والحديث.
 4. أجب بشكل كامل ودقيق ومفصل دون بتر للنص.
 """
-    full_text = ""
     for model_choice in models_to_try:
-        for attempt in range(2):
-            try:
+        try:
+            if output_container:
                 completion = client.chat.completions.create(
                     model=model_choice,
                     messages=[
@@ -355,49 +382,9 @@ def execute_groq_prompt(prompt, system_inst, output_container=None):
                     temperature=0.0,
                     top_p=1.0,
                     max_tokens=4096,
-                    stream=True if output_container else False
-                )
-                if output_container:
-                    for chunk in completion:
-                        chunk_content = chunk.choices[0].delta.content
-                        if chunk_content:
-                            full_text += chunk_content
-                            output_container.markdown(f"<br>{full_text}▌", unsafe_allow_html=True)
-                    output_container.markdown(f"<br>{full_text}", unsafe_allow_html=True)
-                    return full_text
-                else:
-                    return completion.choices[0].message.content.strip()
-            except Exception as e:
-                err_msg = str(e).lower()
-                if "rate" in err_msg or "429" in err_msg:
-                    time.sleep(1.5 * (attempt + 1))
-                    continue
-                break
-    return None
-def execute_chat_turn(messages_history, system_inst, output_container):
-    client = Groq(api_key=GROQ_API_KEY.strip())
-    models_to_try = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"]
-    
-    guarded_system_prompt = f"""
-{system_inst}
-[قواعد لغوية وشرعية إلزامية وصارمة]:
-1. أنت محاور فقهي ومستشار شرعي رصين باللغة العربية الفصحى فقط.
-2. يُمنع منعاً باتاً ظهور أي كلمة أو حرف إنجليزي في الإجابة.
-3. حافظ على سياق المحادثة والتفريعات الفقهية السابقة بدقة وثبات.
-"""
-    full_messages = [{"role": "system", "content": guarded_system_prompt}] + messages_history
-    full_text = ""
-    for model_choice in models_to_try:
-        for attempt in range(2):
-            try:
-                completion = client.chat.completions.create(
-                    model=model_choice,
-                    messages=full_messages,
-                    temperature=0.0,
-                    top_p=1.0,
-                    max_tokens=4096,
                     stream=True
                 )
+                full_text = ""
                 for chunk in completion:
                     chunk_content = chunk.choices[0].delta.content
                     if chunk_content:
@@ -405,15 +392,65 @@ def execute_chat_turn(messages_history, system_inst, output_container):
                         output_container.markdown(f"<br>{full_text}▌", unsafe_allow_html=True)
                 output_container.markdown(f"<br>{full_text}", unsafe_allow_html=True)
                 return full_text
-            except Exception as e:
-                err_msg = str(e).lower()
-                if "rate" in err_msg or "429" in err_msg:
-                    time.sleep(1.5 * (attempt + 1))
-                    continue
-                break
+            else:
+                completion = client.chat.completions.create(
+                    model=model_choice,
+                    messages=[
+                        {"role": "system", "content": guarded_system_prompt},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0.0,
+                    top_p=1.0,
+                    max_tokens=4096
+                )
+                return completion.choices[0].message.content.strip()
+        except Exception as e:
+            continue
+            
+    if output_container:
+        output_container.error("⚠️ حدث خطأ أثناء الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت أو تجديد مفتاح Groq API.")
     return None
+
+def execute_chat_turn(messages_history, system_inst, output_container):
+    client = get_groq_client()
+    models_to_try = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "llama3-70b-8192", "llama3-8b-8192"]
+    
+    guarded_system_prompt = f"""
+{system_inst}
+
+[قواعد لغوية وشرعية إلزامية وصارمة]:
+1. أنت محاور فقهي ومستشار شرعي رصين باللغة العربية الفصحى فقط.
+2. يُمنع منعاً باتاً ظهور أي كلمة أو حرف إنجليزي في الإجابة.
+3. حافظ على سياق المحادثة والتفريعات الفقهية السابقة بدقة وثبات.
+"""
+    full_messages = [{"role": "system", "content": guarded_system_prompt}] + messages_history
+    
+    for model_choice in models_to_try:
+        try:
+            completion = client.chat.completions.create(
+                model=model_choice,
+                messages=full_messages,
+                temperature=0.0,
+                top_p=1.0,
+                max_tokens=4096,
+                stream=True
+            )
+            full_text = ""
+            for chunk in completion:
+                chunk_content = chunk.choices[0].delta.content
+                if chunk_content:
+                    full_text += chunk_content
+                    output_container.markdown(f"<br>{full_text}▌", unsafe_allow_html=True)
+            output_container.markdown(f"<br>{full_text}", unsafe_allow_html=True)
+            return full_text
+        except Exception as e:
+            continue
+            
+    output_container.error("⚠️ تعذر الاتصال بمحرك الذكاء الاصطناعي، يرجى المحاولة بعد لحظات.")
+    return None
+
 def generate_dynamic_quiz_questions(level_name):
-    client = Groq(api_key=GROQ_API_KEY.strip())
+    client = get_groq_client()
     models_to_try = ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"]
     
     sys_prompt = """أنت محرك فقهي ومحدث محقق. ولد 10 أسئلة شرعية جديدة باللغة العربية الفصحى فقط.
@@ -450,6 +487,7 @@ def generate_dynamic_quiz_questions(level_name):
         except Exception:
             continue
     return []
+
 # 7. محرك المواريث والفرائض الحسابي القطعي
 def calculate_inheritance_engine(estate, deceased_gender, has_spouse, sons, daughters, has_father, has_mother):
     shares = {}
@@ -466,18 +504,22 @@ def calculate_inheritance_engine(estate, deceased_gender, has_spouse, sons, daug
                 shares["الزوج"] = {"fraction": "1/4 (الربع)", "value": estate * 0.25, "note": "لوجود الفرع الوارث"}
             else:
                 shares["الزوج"] = {"fraction": "1/2 (النصف)", "value": estate * 0.5, "note": "لعدم وجود فرع وارث"}
+
     if has_mother:
         if has_children or (sons + daughters > 1):
             shares["الأم"] = {"fraction": "1/6 (السدس)", "value": estate * (1/6), "note": "لوجود الفرع الوارث أو جمع الإخوة"}
         else:
             shares["الأم"] = {"fraction": "1/3 (الثلث)", "value": estate * (1/3), "note": "لعدم وجود فرع وارث"}
+
     if has_father:
         if sons > 0:
             shares["الأب"] = {"fraction": "1/6 (السدس فرضاً)", "value": estate * (1/6), "note": "السدس فرضاً لوجود ابن ذكر"}
         elif daughters > 0:
             shares["الأب (فرضاً)"] = {"fraction": "1/6 (السدس)", "value": estate * (1/6), "note": "السدس فرضاً لوجود بنات"}
+
     fixed_allocated = sum(item["value"] for item in shares.values())
     remainder = max(0.0, estate - fixed_allocated)
+
     if sons > 0:
         total_parts = (sons * 2) + daughters
         part_value = remainder / total_parts if total_parts > 0 else 0
@@ -505,7 +547,9 @@ def calculate_inheritance_engine(estate, deceased_gender, has_spouse, sons, daug
             shares["الأب (تعصيباً)"] = {"fraction": "باقي التركة تعصيباً", "value": rem_after_daughters, "note": "يرث الباقي تعصيباً بعد الفروض"}
     elif has_father and "الأب" not in shares:
         shares["الأب"] = {"fraction": "عصبة بالنفس", "value": remainder, "note": "يحوز باقي التركة تعصيباً"}
+
     return shares
+
 def create_printable_html(title: str, content: str) -> str:
     return f"""
     <!DOCTYPE html>
@@ -533,20 +577,26 @@ def create_printable_html(title: str, content: str) -> str:
     </body>
     </html>
     """
+
 # 8. إدارة حالة الجلسة والتنقل
 if "active_view" not in st.session_state:
     st.session_state["active_view"] = "home"
+
 if "last_request_time" not in st.session_state:
     st.session_state["last_request_time"] = 0.0
+
 if "stats" not in st.session_state:
     st.session_state["stats"] = {
         "fiqh_queries": 0, "hadith_queries": 0, "dict_queries": 0,
         "quran_queries": 0, "quiz_total_answered": 0, "quiz_correct_answered": 0
     }
+
 if "chat_messages" not in st.session_state:
     st.session_state["chat_messages"] = []
+
 if "bookmarks" not in st.session_state:
     st.session_state["bookmarks"] = []
+
 if "quiz_pool" not in st.session_state:
     st.session_state["quiz_pool"] = copy.deepcopy(EXPANDED_QUIZ_DATABASE)
 if "quiz_level" not in st.session_state:
@@ -565,12 +615,14 @@ if "quiz_feedback" not in st.session_state:
     st.session_state["quiz_feedback"] = None
 if "shuffled_options" not in st.session_state:
     st.session_state["shuffled_options"] = []
+
 def check_rate_limit(cooldown_seconds: float = 2.0) -> bool:
     now = time.time()
     if now - st.session_state["last_request_time"] < cooldown_seconds:
         return False
     st.session_state["last_request_time"] = now
     return True
+
 def prepare_new_round(level):
     pool = st.session_state["quiz_pool"][level]
     unseen = [q for q in pool if q["question"] not in st.session_state["seen_questions"]]
@@ -587,14 +639,17 @@ def prepare_new_round(level):
     st.session_state["quiz_answered"] = False
     st.session_state["quiz_feedback"] = None
     st.session_state["shuffled_options"] = []
+
 if not st.session_state["current_round_questions"]:
     prepare_new_round(st.session_state["quiz_level"])
+
 # بطاقة الذكر الثابتة
 st.markdown("""
 <div class="dhikr-card">
     <p class="dhikr-text">✨ سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ • اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَىٰ نَبِيِّنَا مُحَمَّدٍ ✨</p>
 </div>
 """, unsafe_allow_html=True)
+
 # ----------------- الشاشة الرئيسية: الأيقونات الدائرية الفخمة -----------------
 if st.session_state["active_view"] == "home":
     st.markdown("""
@@ -603,7 +658,7 @@ if st.session_state["active_view"] == "home":
         <p>البوابة الرقمية الشاملة للأحكام الشرعية وتخريج السنة النبوية</p>
     </div>
     """, unsafe_allow_html=True)
-    # شبكة البطاقات الدائرية الملكية
+
     col1, col2 = st.columns(2)
     
     with col1:
@@ -613,6 +668,7 @@ if st.session_state["active_view"] == "home":
             st.session_state["active_view"] = "fiqh"
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
+
     with col2:
         st.markdown("<div class='circle-icon-badge'>📜</div><div style='text-align:center;'><div class='circle-card-title'>التحقيق الحديثي</div><div class='circle-card-desc'>تخريج ومعجم الألفاظ</div></div>", unsafe_allow_html=True)
         st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
@@ -620,8 +676,10 @@ if st.session_state["active_view"] == "home":
             st.session_state["active_view"] = "hadith"
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
     col3, col4 = st.columns(2)
+
     with col3:
         st.markdown("<div class='circle-icon-badge'>📖</div><div style='text-align:center;'><div class='circle-card-title'>القرآن والتفسير</div><div class='circle-card-desc'>استخراج موضوعي بالمعنى</div></div>", unsafe_allow_html=True)
         st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
@@ -629,6 +687,7 @@ if st.session_state["active_view"] == "home":
             st.session_state["active_view"] = "quran"
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
+
     with col4:
         st.markdown("<div class='circle-icon-badge'>⚖️</div><div style='text-align:center;'><div class='circle-card-title'>الزكاة والمواريث</div><div class='circle-card-desc'>أسعار حية وحساب قطعي</div></div>", unsafe_allow_html=True)
         st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
@@ -636,8 +695,10 @@ if st.session_state["active_view"] == "home":
             st.session_state["active_view"] = "calc"
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
     col5, col6 = st.columns(2)
+
     with col5:
         st.markdown("<div class='circle-icon-badge'>🏆</div><div style='text-align:center;'><div class='circle-card-title'>بنك المسابقات</div><div class='circle-card-desc'>تحديات فقهية متدرجة</div></div>", unsafe_allow_html=True)
         st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
@@ -645,6 +706,7 @@ if st.session_state["active_view"] == "home":
             st.session_state["active_view"] = "quiz"
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
+
     with col6:
         st.markdown("<div class='circle-icon-badge'>⭐</div><div style='text-align:center;'><div class='circle-card-title'>فتاواي المحفوظة</div><div class='circle-card-desc'>سجل دائم وإحصائيات</div></div>", unsafe_allow_html=True)
         st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
@@ -652,6 +714,7 @@ if st.session_state["active_view"] == "home":
             st.session_state["active_view"] = "bookmarks"
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
+
 # ----------------- 1. شاشة الفقه والاستفتاء -----------------
 elif st.session_state["active_view"] == "fiqh":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
@@ -659,25 +722,30 @@ elif st.session_state["active_view"] == "fiqh":
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("""
     <div class="royal-hero">
         <h1>🏛️ المحاور الفقهي المباشر</h1>
         <p>استعراض الفتاوى وتفصيل المذاهب الأربعة بالأدلة الشرعية</p>
     </div>
     """, unsafe_allow_html=True)
+
     selected_madhab = st.selectbox("المذهب الفقهي:", [
         "مقارنة المذاهب الأربعة كاملة (الحنفي، المالكي، الشافعي، الحنبلي)", "المذهب الحنفي فقط", "المذهب المالكي فقط", "المذهب الشافعي فقط", "المذهب الحنبلي فقط"
     ])
     depth_level = st.selectbox("مستوى التفصيل:", ["موجز ميسر", "متوسط وتأصيلي", "بحث فقهي موسع"], index=1)
+
     if st.session_state["chat_messages"]:
         if st.button("🗑️ مسح المحادثة وبدء جلسة جديدة"):
             st.session_state["chat_messages"] = []
             st.rerun()
+
     for msg in st.session_state["chat_messages"]:
         if msg["role"] == "user":
             st.markdown(f"<div style='background:rgba(30,58,138,0.35); border:1px solid rgba(59,130,246,0.4); border-radius:14px; padding:0.9rem; margin-bottom:0.7rem;'>👤 <strong>السؤال:</strong> {msg['content']}</div>", unsafe_allow_html=True)
         else:
             st.markdown(f"<div style='background:rgba(15,23,42,0.9); border:1.5px solid rgba(234,179,8,0.45); border-radius:14px; padding:1.1rem; margin-bottom:1.1rem;'>🕌 <strong>البيان الفقهي:</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
+
     chat_input = st.text_input("اكتب استفسارك الفقهي هنا:", placeholder="مثال: حكم صلاة الوتر وصفتها؟ وهل تجوز بركعة واحدة؟...", key="chat_fiqh_input")
     st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
     if st.button("💬 إرسال واستفتاء", use_container_width=True):
@@ -694,6 +762,7 @@ elif st.session_state["active_view"] == "fiqh":
 أنت مفتٍ ومحاور فقهي ومحدث محقق.
 المذهب المطلوب: {selected_madhab}
 مستوى التفصيل: {depth_level}
+
 هيكل الإجابة المطلوب بالعربية الفصحى فقط:
 # 📌 خلاصة الحكم الشرعي المباشر
 # 📖 الاستدلال من القرآن الكريم والسنة النبوية
@@ -706,6 +775,7 @@ elif st.session_state["active_view"] == "fiqh":
                 st.session_state["stats"]["fiqh_queries"] += 1
                 st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+
     if st.session_state["chat_messages"] and st.session_state["chat_messages"][-1]["role"] == "assistant":
         last_q = [m["content"] for m in st.session_state["chat_messages"] if m["role"] == "user"][-1]
         last_a = st.session_state["chat_messages"][-1]["content"]
@@ -725,6 +795,7 @@ elif st.session_state["active_view"] == "fiqh":
                 mime="text/html",
                 use_container_width=True
             )
+
 # ----------------- 2. شاشة الحديث ومعجم الألفاظ -----------------
 elif st.session_state["active_view"] == "hadith":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
@@ -732,12 +803,14 @@ elif st.session_state["active_view"] == "hadith":
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("""
     <div class="royal-hero">
         <h1>📜 تخريج الحديث ومعجم الألفاظ</h1>
         <p>التحقق من صحة الأحاديث • الرواة والمصادر • بيان الألفاظ الغريبة</p>
     </div>
     """, unsafe_allow_html=True)
+
     hadith_input = st.text_input("اكتب نص الحديث أو جزءاً منه:", max_chars=350, placeholder="مثال: إنما الأعمال بالنيات...")
     st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
     if st.button("🔍 تخريج وتحقيق الحديث", use_container_width=True):
@@ -762,6 +835,7 @@ elif st.session_state["active_view"] == "hadith":
             if h_res:
                 st.session_state["stats"]["hadith_queries"] += 1
     st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("---")
     term_input = st.text_input("اكتب اللفظ أو المصطلح الشرعي المراد تفسيره:", max_chars=100, placeholder="مثال: الصاع، العول، الكلالة، القسامة...")
     st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
@@ -785,6 +859,7 @@ elif st.session_state["active_view"] == "hadith":
             if t_res:
                 st.session_state["stats"]["dict_queries"] += 1
     st.markdown("</div>", unsafe_allow_html=True)
+
 # ----------------- 3. شاشة القرآن والتفسير -----------------
 elif st.session_state["active_view"] == "quran":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
@@ -792,12 +867,14 @@ elif st.session_state["active_view"] == "quran":
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("""
     <div class="royal-hero">
         <h1>📖 قسم القرآن والتفسير الموضوعي</h1>
         <p>استخراج الآيات بالمفهوم والمعنى • أسباب النزول • الاستنباطات الفقهية</p>
     </div>
     """, unsafe_allow_html=True)
+
     quran_topic = st.text_input("اكتب الموضوع أو الفكرة القرآنية:", placeholder="مثال: البر بالوالدين، الإنفاق والصدقة، الصبر، أكل أموال الناس بالباطل...")
     st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
     if st.button("📖 استخراج الآيات والتفسير الموضوعي", use_container_width=True):
@@ -814,14 +891,17 @@ elif st.session_state["active_view"] == "quran":
 # 📖 الآيات القرآنية ذات الصلة بالموضوع
 اذكر نصوص الآيات مع اسم السورة ورقم الآية:
 - «نص الآية الكريمة» [السورة: رقم الآية]
+
 # 💡 التفسير الميسر وأسباب النزول
 (اعتماداً على تفسير ابن كثير والسعدي)
+
 # ⚖️ الاستنباطات والفوائد الفقهية والعملية
 """
             q_res = execute_groq_prompt(cleaned_qtopic, q_sys, q_output)
             if q_res:
                 st.session_state["stats"]["quran_queries"] += 1
     st.markdown("</div>", unsafe_allow_html=True)
+
 # ----------------- 4. شاشة الزكاة والمواريث -----------------
 elif st.session_state["active_view"] == "calc":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
@@ -829,15 +909,19 @@ elif st.session_state["active_view"] == "calc":
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("""
     <div class="royal-hero">
         <h1>⚖️ حاسبة الزكاة والمواريث (بالجنيه المصري)</h1>
         <p>ربط لحظي بأسعار الذهب والفضة اليوم • حساب قطعي 100% • قسمة التركات</p>
     </div>
     """, unsafe_allow_html=True)
+
     market_prices = fetch_egypt_gold_silver_prices()
     st.markdown(f"<div class='market-badge'>🟢 {market_prices['source']}</div>", unsafe_allow_html=True)
+
     calc_sub_type = st.radio("اختر العملية الحسابية:", ["💰 حساب زكاة المال والذهب", "👨‍👩‍👧‍👦 توزيع التركات والمواريث"], horizontal=True)
+
     if calc_sub_type.startswith("💰"):
         selected_karat = st.selectbox("عيار الذهب المتوفر لديك:", ["عيار 21 (الأكثر تداولاً)", "عيار 24 (الذهب الخالص)", "عيار 18"])
         
@@ -872,9 +956,9 @@ elif st.session_state["active_view"] == "calc":
             
             is_nisab_reached = total_wealth_egp >= nisab_in_egp
             zakah_due_egp = total_wealth_egp * 0.025 if is_nisab_reached else 0.0
+
             st.markdown("### 📊 جدول البيان المالي للزكاة:")
             z_table = f"""
-
 | البند المالي الشرعي | القيمة / المقدار | البيان والتفصيل |
 | :--- | :--- | :--- |
 | **قيمة الذهب المدخر** | `{gold_val_egp:,.2f} ج.م` | وزن `{gold_weight_input} جم` ({selected_karat}) |
@@ -884,7 +968,6 @@ elif st.session_state["active_view"] == "calc":
 | **حد النصاب الشرعي** | **`{nisab_in_egp:,.2f} ج.م`** | يعادل `85 جرام ذهب عيار 24` (أو `{karat_nisab:.2f} جم` لـ {selected_karat}) |
 | **حالة بلوغ النصاب** | **{'بلغ النصاب الشرعي ✅' if is_nisab_reached else 'لم يبلغ النصاب بعد ❌'}** | يشترط مرور حول كامل (سنة هجرية) |
 | **مقدار الزكاة الواجبة فوراً** | **`{zakah_due_egp:,.2f} ج.م`** | **نسبة 2.5% (ربع العشر)** |
-
 """
             st.markdown(z_table)
             if is_nisab_reached:
@@ -893,6 +976,7 @@ elif st.session_state["active_view"] == "calc":
                 shortage = nisab_in_egp - total_wealth_egp
                 st.info(f"ℹ️ **لا تجب الزكاة حالياً:** ينقص مالك مبلغ **`{shortage:,.2f} جنيه مصري`** ليصل إلى النصاب.")
         st.markdown("</div>", unsafe_allow_html=True)
+
     else:
         estate_val = st.number_input("إجمالي قيمة التركة المالية (بالجنيه المصري):", min_value=100.0, value=500000.0, step=10000.0)
         deceased_gender = st.radio("المتوفى:", ["رجل (ترك زوجة/أولاد)", "امرأة (تركت زوج/أولاد)"], horizontal=True)
@@ -920,12 +1004,14 @@ elif st.session_state["active_view"] == "calc":
 - البنات: {daughters_count}
 - الأب: {'نعم' if has_father else 'لا'}
 - الأم: {'نعم' if has_mother else 'لا'}
+
 قم بذكر الآيات القرآنية من سورة النساء الصريحة في قسمة هذه التركة، وبيان حالات الحجب بقواعد علم الفرائض باللغة العربية الفصحى فقط.
 """
             estate_sys = """أنت فقيه ومحقق في علم الفرائض. اذكر نصوص الآيات من سورة النساء التي استندت إليها هذه المسألة وبيان سبب حجب الحواشي بالعربية فقط."""
             m_out = st.empty()
             execute_groq_prompt(estate_prompt, estate_sys, m_out)
         st.markdown("</div>", unsafe_allow_html=True)
+
 # ----------------- 5. شاشة المسابقات والتحديات -----------------
 elif st.session_state["active_view"] == "quiz":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
@@ -933,12 +1019,14 @@ elif st.session_state["active_view"] == "quiz":
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("""
     <div class="royal-hero">
         <h1>🏆 بنك المسابقات والتحديات</h1>
         <p>اختبر معلوماتك الشرعية • مستويات تدريجية • تصحيح فوري</p>
     </div>
     """, unsafe_allow_html=True)
+
     selected_level = st.selectbox(
         "🎯 حدد مستوى التحدي:",
         list(st.session_state["quiz_pool"].keys()),
@@ -948,6 +1036,7 @@ elif st.session_state["active_view"] == "quiz":
         st.session_state["quiz_level"] = selected_level
         prepare_new_round(selected_level)
         st.rerun()
+
     st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
     if st.button("⚡ توليد أسئلة جديدة بالذكاء الاصطناعي", use_container_width=True):
         if not check_rate_limit(cooldown_seconds=2.0):
@@ -965,9 +1054,11 @@ elif st.session_state["active_view"] == "quiz":
                     st.info("🔄 تم تجديد الأسئلة وبدء جولة غير مكررة من بنك الأسئلة!")
                     st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+
     questions = st.session_state["current_round_questions"]
     current_idx = st.session_state["quiz_idx"]
     total_q = len(questions)
+
     if total_q == 0:
         st.info("لا توجد أسئلة حالياً. اضغط على زر التوليد لجلب أسئلة جديدة.")
     elif current_idx < total_q:
@@ -980,6 +1071,7 @@ elif st.session_state["active_view"] == "quiz":
         progress_val = current_idx / total_q
         st.progress(progress_val)
         st.write(f"📌 **السؤال {current_idx + 1} من {total_q}** | ⭐ **النقاط: {st.session_state['quiz_score']}/{total_q}**")
+
         st.markdown(f"""
         <div class="quiz-card">
             <h3 style="color:#ffffff; line-height:1.6; font-size:1.15rem;">{q_data['question']}</h3>
@@ -1051,6 +1143,7 @@ elif st.session_state["active_view"] == "quiz":
                     prepare_new_round(st.session_state["quiz_level"])
                     st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
+
 # ----------------- 6. شاشة المفضلة والإحصائيات -----------------
 elif st.session_state["active_view"] == "bookmarks":
     st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
@@ -1058,12 +1151,14 @@ elif st.session_state["active_view"] == "bookmarks":
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("""
     <div class="royal-hero">
         <h1>⭐ الفتاوى المحفوظة والإحصائيات</h1>
         <p>سجل استشاراتك المحفوظة بهاتفك ومؤشرات التفاعل في الجلسة</p>
     </div>
     """, unsafe_allow_html=True)
+
     col_s1, col_s2 = st.columns(2)
     with col_s1:
         st.markdown(f"""
@@ -1094,6 +1189,7 @@ elif st.session_state["active_view"] == "bookmarks":
             <div class="stat-title">دقة إجابات المسابقات</div>
         </div>
         """, unsafe_allow_html=True)
+
     st.markdown("---")
     st.markdown("### 📌 الفتاوى المحفوظة في المفضلة:")
     if not st.session_state["bookmarks"]:
@@ -1114,7 +1210,8 @@ elif st.session_state["active_view"] == "bookmarks":
                     mime="text/html",
                     key=f"dl_bmark_{idx}"
                 )
-# 9. التذييل الفاخر
+
+# 9. التذييل
 st.markdown("""
 <div class="royal-footer">
     <div style="color: #9ca3af; margin-bottom: 0.5rem;">نظام فقهي استدلالي وتوثيقي مقارن مبني بنماذج الذكاء الاصطناعي المتقدمة</div>
