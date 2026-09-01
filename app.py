@@ -167,7 +167,7 @@ st.markdown("""
 try:
     GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 except Exception:
-    GROQ_API_KEY = "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"
+    GROQ_API_KEY = "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"
 def ask_groq(prompt, system_instruction):
     client = Groq(api_key=GROQ_API_KEY.strip())
     models = ["llama3-70b-8192", "llama3-8b-8192", "gemma2-9b-it"]
