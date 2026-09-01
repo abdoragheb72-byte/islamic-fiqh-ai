@@ -15,7 +15,7 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed"
 )
-# 2. تصميم ملكي فائق الفخامة (Obsidian & Liquid Gold Design System)
+# 2. تصميم ملكي حديث بالأيقونات الدائرية الفاخرة
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@700&family=Cairo:wght@400;600;700;800;900&display=swap');
@@ -26,8 +26,8 @@ st.markdown("""
     }
     
     html, body, .stApp {
-        background: radial-gradient(circle at 50% 0%, #111827 0%, #080c14 45%, #030508 100%) !important;
-        color: #f3f4f6 !important;
+        background: radial-gradient(circle at 50% -10%, #1e1b4b 0%, #090d16 40%, #030712 100%) !important;
+        color: #f8fafc !important;
         direction: rtl !important;
         overflow-x: hidden !important;
     }
@@ -36,20 +36,20 @@ st.markdown("""
     }
     .main .block-container {
         padding: 1rem 0.8rem 2.5rem 0.8rem !important;
-        max-width: 680px !important;
+        max-width: 650px !important;
     }
     
-    /* كرت الذكر النوراني */
+    /* بطاقة الذكر الزجاجية المتوهجة */
     .dhikr-card {
-        background: linear-gradient(135deg, rgba(217, 119, 6, 0.1) 0%, rgba(17, 24, 39, 0.6) 100%);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        border: 1px solid rgba(245, 158, 11, 0.35);
-        border-radius: 16px;
-        padding: 0.8rem 1rem;
+        background: linear-gradient(135deg, rgba(234, 179, 8, 0.1) 0%, rgba(15, 23, 42, 0.6) 100%);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(234, 179, 8, 0.4);
+        border-radius: 20px;
+        padding: 0.85rem 1rem;
         margin-bottom: 1.2rem;
         text-align: center;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
     
     .dhikr-text {
@@ -62,88 +62,115 @@ st.markdown("""
         text-shadow: 0 0 12px rgba(254, 240, 138, 0.25);
     }
     
-    /* الهيدر الأوبرالي الملكي */
+    /* الهيدر الفخم */
     .royal-hero {
-        background: linear-gradient(180deg, rgba(31, 41, 55, 0.7) 0%, rgba(17, 24, 39, 0.95) 100%);
-        border: 1.5px solid rgba(217, 119, 6, 0.5);
-        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(30, 27, 75, 0.4) 0%, rgba(15, 23, 42, 0.85) 100%);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(234, 179, 8, 0.45);
+        border-radius: 24px;
         padding: 1.6rem 1rem;
         margin-bottom: 1.5rem;
         text-align: center;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        position: relative;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     
     .royal-hero h1 {
         font-family: 'Aref Ruqaa', serif !important;
         color: #fbbf24;
-        font-size: 2rem;
-        margin-bottom: 0.4rem;
+        font-size: 1.95rem;
+        margin-bottom: 0.35rem;
         line-height: 1.3;
-        letter-spacing: -0.5px;
+        text-shadow: 0 2px 15px rgba(251, 191, 36, 0.35);
     }
     
     .royal-hero p {
-        color: #93c5fd;
+        color: #c7d2fe;
         font-size: 0.95rem;
         font-weight: 600;
         margin-bottom: 0;
     }
-    /* حقول الإدخال */
+    /* كروت الأيقونات الدائرية */
+    .circle-icon-badge {
+        width: 68px;
+        height: 68px;
+        line-height: 68px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(234, 179, 8, 0.25) 0%, rgba(15, 23, 42, 0.9) 100%);
+        border: 2px solid #fbbf24;
+        font-size: 1.9rem;
+        margin: 0 auto 0.6rem auto;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(234, 179, 8, 0.35), inset 0 0 10px rgba(234, 179, 8, 0.2);
+        transition: all 0.3s ease;
+    }
+    .circle-card-title {
+        color: #f8fafc;
+        font-weight: 800;
+        font-size: 1rem;
+        margin-bottom: 0.2rem;
+    }
+    .circle-card-desc {
+        color: #94a3b8;
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+    /* تخصيص الأزرار الشبكية */
+    .hub-grid-btn>button {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%) !important;
+        border: 1px solid rgba(234, 179, 8, 0.35) !important;
+        border-radius: 20px !important;
+        padding: 1.2rem 0.6rem !important;
+        height: 100% !important;
+        min-height: 145px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+        transition: all 0.25s ease !important;
+    }
+    .hub-grid-btn>button:hover {
+        transform: translateY(-4px) !important;
+        border-color: #fbbf24 !important;
+        box-shadow: 0 15px 35px rgba(234, 179, 8, 0.25) !important;
+    }
+    /* الحقول والمدخلات */
     .stTextInput>div>div>input, .stTextArea>div>div>textarea, .stNumberInput>div>div>input {
-        background: rgba(17, 24, 39, 0.9) !important;
+        background: rgba(15, 23, 42, 0.85) !important;
         color: #ffffff !important;
-        border: 1.5px solid rgba(217, 119, 6, 0.4) !important;
+        border: 1.5px solid rgba(234, 179, 8, 0.4) !important;
         border-radius: 14px !important;
         padding: 0.75rem 1rem !important;
-        font-size: 1.05rem !important;
+        font-size: 1rem !important;
         font-weight: 600 !important;
     }
     .stTextInput>div>div>input:focus, .stTextArea>div>div>textarea:focus {
-        border-color: #f59e0b !important;
-        box-shadow: 0 0 15px rgba(245, 158, 11, 0.3) !important;
+        border-color: #fbbf24 !important;
+        box-shadow: 0 0 15px rgba(251, 191, 36, 0.3) !important;
     }
-    
     .stRadio label, .stSelectbox label {
         font-size: 1.05rem !important;
         font-weight: 700 !important;
         color: #fbbf24 !important;
     }
-    
-    /* بطاقات القائمة التفاعلية */
-    .stButton>button {
-        background: linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(17, 24, 39, 0.95) 100%) !important;
+    .action-submit-btn>button {
+        background: linear-gradient(135deg, #f59e0b 0%, #b45309 60%, #78350f 100%) !important;
         color: #ffffff !important;
         font-weight: 800 !important;
-        font-size: 1.1rem !important;
-        border: 1.5px solid rgba(217, 119, 6, 0.45) !important;
-        border-radius: 16px !important;
-        padding: 1.1rem 1.2rem !important;
-        width: 100%;
-        margin-bottom: 0.8rem;
-        text-align: right !important;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-    .stButton>button:hover {
-        border-color: #fbbf24 !important;
-        transform: translateY(-2px);
-        background: linear-gradient(135deg, rgba(45, 55, 72, 0.95) 0%, rgba(26, 32, 44, 0.95) 100%) !important;
-        box-shadow: 0 12px 30px rgba(217, 119, 6, 0.25) !important;
-    }
-    .primary-action-btn>button {
-        background: linear-gradient(135deg, #d97706 0%, #b45309 60%, #78350f 100%) !important;
-        color: #ffffff !important;
+        font-size: 1.05rem !important;
         border: 1px solid rgba(254, 240, 138, 0.4) !important;
-        text-align: center !important;
+        border-radius: 14px !important;
+        padding: 0.75rem 1.2rem !important;
+        width: 100%;
+        margin-top: 0.5rem;
         box-shadow: 0 8px 25px rgba(180, 83, 9, 0.4) !important;
     }
-    .back-btn>button {
-        background: linear-gradient(135deg, #1f2937 0%, #111827 100%) !important;
-        border: 1px solid rgba(217, 119, 6, 0.4) !important;
+    .back-nav-btn>button {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+        border: 1px solid rgba(234, 179, 8, 0.4) !important;
         color: #fbbf24 !important;
         margin-bottom: 1.2rem !important;
-        text-align: center !important;
+        border-radius: 14px !important;
         padding: 0.65rem 1rem !important;
         font-size: 1rem !important;
     }
@@ -151,13 +178,13 @@ st.markdown("""
     .stMarkdown {
         font-size: 1.05rem !important;
         line-height: 1.9 !important;
-        color: #f3f4f6 !important;
+        color: #f8fafc !important;
     }
     .stMarkdown h1 {
         font-family: 'Amiri', serif !important;
         color: #fbbf24 !important;
-        font-size: 1.5rem !important;
-        border-bottom: 1.5px solid rgba(217, 119, 6, 0.35) !important;
+        font-size: 1.45rem !important;
+        border-bottom: 1.5px solid rgba(234, 179, 8, 0.35) !important;
         padding-bottom: 0.4rem !important;
         margin-top: 1.2rem !important;
     }
@@ -165,7 +192,7 @@ st.markdown("""
     .stMarkdown h2, .stMarkdown h3 {
         font-family: 'Amiri', serif !important;
         color: #38bdf8 !important;
-        font-size: 1.3rem !important;
+        font-size: 1.25rem !important;
     }
     table {
         width: 100% !important;
@@ -176,21 +203,21 @@ st.markdown("""
         margin: 1rem 0 !important;
     }
     th, td {
-        border: 1px solid rgba(217, 119, 6, 0.35) !important;
+        border: 1px solid rgba(234, 179, 8, 0.35) !important;
         padding: 8px 12px !important;
     }
     .quiz-card {
-        background: rgba(17, 24, 39, 0.9);
-        border: 1.5px solid #f59e0b;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1.5px solid #fbbf24;
         border-radius: 18px;
         padding: 1.2rem;
         margin-bottom: 1rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
     
     .stat-card {
-        background: rgba(17, 24, 39, 0.85);
-        border: 1px solid rgba(217, 119, 6, 0.35);
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(234, 179, 8, 0.35);
         border-radius: 16px;
         padding: 1rem;
         text-align: center;
@@ -202,7 +229,7 @@ st.markdown("""
         color: #fbbf24;
     }
     .stat-title {
-        color: #9ca3af;
+        color: #94a3b8;
         font-size: 0.9rem;
         font-weight: 700;
     }
@@ -220,17 +247,17 @@ st.markdown("""
     .royal-footer {
         margin-top: 3rem;
         padding: 1.6rem 1rem;
-        border-top: 1px solid rgba(217, 119, 6, 0.3);
-        background: linear-gradient(180deg, transparent 0%, rgba(17, 24, 39, 0.95) 100%);
-        border-radius: 18px 18px 0 0;
+        border-top: 1px solid rgba(234, 179, 8, 0.25);
+        background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.95) 100%);
+        border-radius: 20px 20px 0 0;
         text-align: center;
         font-size: 0.95rem;
     }
     
     .dev-badge {
         display: inline-block;
-        background: rgba(217, 119, 6, 0.15);
-        border: 1px solid rgba(245, 158, 11, 0.5);
+        background: rgba(234, 179, 8, 0.15);
+        border: 1px solid rgba(234, 179, 8, 0.5);
         padding: 0.3rem 0.9rem;
         border-radius: 14px;
         color: #facc15;
@@ -239,8 +266,7 @@ st.markdown("""
     }
     @media only screen and (max-width: 600px) {
         .royal-hero h1 { font-size: 1.45rem !important; }
-        .royal-hero p { font-size: 0.85rem !important; }
-        .stButton>button { font-size: 1rem !important; padding: 0.9rem 1rem !important; }
+        .circle-icon-badge { width: 58px; height: 58px; line-height: 58px; font-size: 1.6rem; }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -569,37 +595,67 @@ st.markdown("""
     <p class="dhikr-text">✨ سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ • اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَىٰ نَبِيِّنَا مُحَمَّدٍ ✨</p>
 </div>
 """, unsafe_allow_html=True)
-# ----------------- الشاشة الرئيسية: بطاقات المهام الملكية (Action Hub) -----------------
+# ----------------- الشاشة الرئيسية: الأيقونات الدائرية الفخمة -----------------
 if st.session_state["active_view"] == "home":
     st.markdown("""
     <div class="royal-hero">
         <h1>🕌 الموسوعة الفقهية والحديثية</h1>
-        <p>البوابة الذكية المعتمدة للأحكام الفقهية وتخريج السنة النبوية</p>
+        <p>البوابة الرقمية الشاملة للأحكام الشرعية وتخريج السنة النبوية</p>
     </div>
     """, unsafe_allow_html=True)
-    # بطاقات الأقسام العريضة
-    if st.button("🏛️  المحاور الفقهي المباشر\nاستفتاء تفاعلي • مقارنة المذاهب الأربعة • أدلة معتمدة", use_container_width=True):
-        st.session_state["active_view"] = "fiqh"
-        st.rerun()
-    if st.button("📜  تخريج الحديث ومعجم الألفاظ\nالتحقق من الرتبة • البحث في كتب السنة • تفسير المصطلحات", use_container_width=True):
-        st.session_state["active_view"] = "hadith"
-        st.rerun()
-    if st.button("📖  قسم القرآن والتفسير الموضوعي\nاستخراج الآيات بالمفهوم • أسباب النزول • الاستنباطات", use_container_width=True):
-        st.session_state["active_view"] = "quran"
-        st.rerun()
-    if st.button("⚖️  حاسبة الزكاة والمواريث\nربط لحظي بأسعار الذهب والفضة • قسمة التركات بالجنيه", use_container_width=True):
-        st.session_state["active_view"] = "calc"
-        st.rerun()
-    if st.button("🏆  بنك المسابقات والتحديات\nاختبر معلوماتك الشرعية • مستويات تدريجية • أدلة وتصحيح", use_container_width=True):
-        st.session_state["active_view"] = "quiz"
-        st.rerun()
-    if st.button("⭐  الفتاوى المحفوظة والإحصائيات\nسجل استشاراتك المحفوظة بهاتفك • تقارير التفاعل", use_container_width=True):
-        st.session_state["active_view"] = "bookmarks"
-        st.rerun()
+    # شبكة البطاقات الدائرية الملكية
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("<div class='circle-icon-badge'>🏛️</div><div style='text-align:center;'><div class='circle-card-title'>المحاور الفقهي</div><div class='circle-card-desc'>فتاوى المذاهب الأربعة</div></div>", unsafe_allow_html=True)
+        st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
+        if st.button("دخول القسم الفقهي", key="btn_hub_fiqh", use_container_width=True):
+            st.session_state["active_view"] = "fiqh"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+    with col2:
+        st.markdown("<div class='circle-icon-badge'>📜</div><div style='text-align:center;'><div class='circle-card-title'>التحقيق الحديثي</div><div class='circle-card-desc'>تخريج ومعجم الألفاظ</div></div>", unsafe_allow_html=True)
+        st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
+        if st.button("دخول قسم الحديث", key="btn_hub_hadith", use_container_width=True):
+            st.session_state["active_view"] = "hadith"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
+    col3, col4 = st.columns(2)
+    with col3:
+        st.markdown("<div class='circle-icon-badge'>📖</div><div style='text-align:center;'><div class='circle-card-title'>القرآن والتفسير</div><div class='circle-card-desc'>استخراج موضوعي بالمعنى</div></div>", unsafe_allow_html=True)
+        st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
+        if st.button("دخول قسم القرآن", key="btn_hub_quran", use_container_width=True):
+            st.session_state["active_view"] = "quran"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+    with col4:
+        st.markdown("<div class='circle-icon-badge'>⚖️</div><div style='text-align:center;'><div class='circle-card-title'>الزكاة والمواريث</div><div class='circle-card-desc'>أسعار حية وحساب قطعي</div></div>", unsafe_allow_html=True)
+        st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
+        if st.button("دخول قسم الفرائض", key="btn_hub_calc", use_container_width=True):
+            st.session_state["active_view"] = "calc"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
+    col5, col6 = st.columns(2)
+    with col5:
+        st.markdown("<div class='circle-icon-badge'>🏆</div><div style='text-align:center;'><div class='circle-card-title'>بنك المسابقات</div><div class='circle-card-desc'>تحديات فقهية متدرجة</div></div>", unsafe_allow_html=True)
+        st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
+        if st.button("دخول المسابقات", key="btn_hub_quiz", use_container_width=True):
+            st.session_state["active_view"] = "quiz"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+    with col6:
+        st.markdown("<div class='circle-icon-badge'>⭐</div><div style='text-align:center;'><div class='circle-card-title'>فتاواي المحفوظة</div><div class='circle-card-desc'>سجل دائم وإحصائيات</div></div>", unsafe_allow_html=True)
+        st.markdown("<div class='hub-grid-btn'>", unsafe_allow_html=True)
+        if st.button("دخول المفضلة", key="btn_hub_bookmarks", use_container_width=True):
+            st.session_state["active_view"] = "bookmarks"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 # ----------------- 1. شاشة الفقه والاستفتاء -----------------
 elif st.session_state["active_view"] == "fiqh":
-    st.markdown("<div class='back-btn'>", unsafe_allow_html=True)
-    if st.button("⬅️ العودة للقائمة الرئيسية", use_container_width=True):
+    st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
+    if st.button("⬅️ العودة للرئيسية", use_container_width=True):
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
@@ -621,9 +677,9 @@ elif st.session_state["active_view"] == "fiqh":
         if msg["role"] == "user":
             st.markdown(f"<div style='background:rgba(30,58,138,0.35); border:1px solid rgba(59,130,246,0.4); border-radius:14px; padding:0.9rem; margin-bottom:0.7rem;'>👤 <strong>السؤال:</strong> {msg['content']}</div>", unsafe_allow_html=True)
         else:
-            st.markdown(f"<div style='background:rgba(17,24,39,0.9); border:1.5px solid rgba(217,119,6,0.45); border-radius:14px; padding:1.1rem; margin-bottom:1.1rem;'>🕌 <strong>البيان الفقهي:</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='background:rgba(15,23,42,0.9); border:1.5px solid rgba(234,179,8,0.45); border-radius:14px; padding:1.1rem; margin-bottom:1.1rem;'>🕌 <strong>البيان الفقهي:</strong><br>{msg['content']}</div>", unsafe_allow_html=True)
     chat_input = st.text_input("اكتب استفسارك الفقهي هنا:", placeholder="مثال: حكم صلاة الوتر وصفتها؟ وهل تجوز بركعة واحدة؟...", key="chat_fiqh_input")
-    st.markdown("<div class='primary-action-btn'>", unsafe_allow_html=True)
+    st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
     if st.button("💬 إرسال واستفتاء", use_container_width=True):
         cleaned_chat_query = sanitize_user_input(chat_input, max_chars=400)
         if not cleaned_chat_query:
@@ -671,8 +727,8 @@ elif st.session_state["active_view"] == "fiqh":
             )
 # ----------------- 2. شاشة الحديث ومعجم الألفاظ -----------------
 elif st.session_state["active_view"] == "hadith":
-    st.markdown("<div class='back-btn'>", unsafe_allow_html=True)
-    if st.button("⬅️ العودة للقائمة الرئيسية", use_container_width=True):
+    st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
+    if st.button("⬅️ العودة للرئيسية", use_container_width=True):
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
@@ -683,7 +739,7 @@ elif st.session_state["active_view"] == "hadith":
     </div>
     """, unsafe_allow_html=True)
     hadith_input = st.text_input("اكتب نص الحديث أو جزءاً منه:", max_chars=350, placeholder="مثال: إنما الأعمال بالنيات...")
-    st.markdown("<div class='primary-action-btn'>", unsafe_allow_html=True)
+    st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
     if st.button("🔍 تخريج وتحقيق الحديث", use_container_width=True):
         cleaned_hadith = sanitize_user_input(hadith_input, max_chars=350)
         if not cleaned_hadith:
@@ -708,7 +764,7 @@ elif st.session_state["active_view"] == "hadith":
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("---")
     term_input = st.text_input("اكتب اللفظ أو المصطلح الشرعي المراد تفسيره:", max_chars=100, placeholder="مثال: الصاع، العول، الكلالة، القسامة...")
-    st.markdown("<div class='primary-action-btn'>", unsafe_allow_html=True)
+    st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
     if st.button("📖 شرح وتفسير المصطلح", use_container_width=True):
         cleaned_term = sanitize_user_input(term_input, max_chars=100)
         if not cleaned_term:
@@ -731,8 +787,8 @@ elif st.session_state["active_view"] == "hadith":
     st.markdown("</div>", unsafe_allow_html=True)
 # ----------------- 3. شاشة القرآن والتفسير -----------------
 elif st.session_state["active_view"] == "quran":
-    st.markdown("<div class='back-btn'>", unsafe_allow_html=True)
-    if st.button("⬅️ العودة للقائمة الرئيسية", use_container_width=True):
+    st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
+    if st.button("⬅️ العودة للرئيسية", use_container_width=True):
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
@@ -743,7 +799,7 @@ elif st.session_state["active_view"] == "quran":
     </div>
     """, unsafe_allow_html=True)
     quran_topic = st.text_input("اكتب الموضوع أو الفكرة القرآنية:", placeholder="مثال: البر بالوالدين، الإنفاق والصدقة، الصبر، أكل أموال الناس بالباطل...")
-    st.markdown("<div class='primary-action-btn'>", unsafe_allow_html=True)
+    st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
     if st.button("📖 استخراج الآيات والتفسير الموضوعي", use_container_width=True):
         cleaned_qtopic = sanitize_user_input(quran_topic, max_chars=200)
         if not cleaned_qtopic:
@@ -768,8 +824,8 @@ elif st.session_state["active_view"] == "quran":
     st.markdown("</div>", unsafe_allow_html=True)
 # ----------------- 4. شاشة الزكاة والمواريث -----------------
 elif st.session_state["active_view"] == "calc":
-    st.markdown("<div class='back-btn'>", unsafe_allow_html=True)
-    if st.button("⬅️ العودة للقائمة الرئيسية", use_container_width=True):
+    st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
+    if st.button("⬅️ العودة للرئيسية", use_container_width=True):
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
@@ -797,7 +853,7 @@ elif st.session_state["active_view"] == "calc":
         silver_weight = st.number_input("وزن الفضة المدخرة بالجرام (إن وجد):", min_value=0.0, value=0.0, step=10.0)
         silver_price = st.number_input("سعر جرام الفضة اليوم (بالجنيه):", min_value=1.0, value=float(market_prices["silver"]), step=1.0)
             
-        st.markdown("<div class='primary-action-btn'>", unsafe_allow_html=True)
+        st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
         if st.button("🧮 احتساب تفاصيل الزكاة الشرعية", use_container_width=True):
             if "24" in selected_karat:
                 price_24 = gold_price_input
@@ -846,7 +902,7 @@ elif st.session_state["active_view"] == "calc":
         has_father = st.checkbox("الأب حي", value=False)
         has_mother = st.checkbox("الأم حية", value=True)
             
-        st.markdown("<div class='primary-action-btn'>", unsafe_allow_html=True)
+        st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
         if st.button("⚖️ احتساب التوزيع الشرعي والأدلة", use_container_width=True):
             results = calculate_inheritance_engine(estate_val, deceased_gender, has_spouse, sons_count, daughters_count, has_father, has_mother)
             st.markdown("### 📊 جدول القسمة الشرعية وتوزيع الأنصبة (بالجنيه المصري):")
@@ -872,8 +928,8 @@ elif st.session_state["active_view"] == "calc":
         st.markdown("</div>", unsafe_allow_html=True)
 # ----------------- 5. شاشة المسابقات والتحديات -----------------
 elif st.session_state["active_view"] == "quiz":
-    st.markdown("<div class='back-btn'>", unsafe_allow_html=True)
-    if st.button("⬅️ العودة للقائمة الرئيسية", use_container_width=True):
+    st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
+    if st.button("⬅️ العودة للرئيسية", use_container_width=True):
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
@@ -892,7 +948,7 @@ elif st.session_state["active_view"] == "quiz":
         st.session_state["quiz_level"] = selected_level
         prepare_new_round(selected_level)
         st.rerun()
-    st.markdown("<div class='primary-action-btn'>", unsafe_allow_html=True)
+    st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
     if st.button("⚡ توليد أسئلة جديدة بالذكاء الاصطناعي", use_container_width=True):
         if not check_rate_limit(cooldown_seconds=2.0):
             st.info("⏳ يرجى الانتظار ثانية واحدة قبل طلب توليد جديد.")
@@ -939,7 +995,7 @@ elif st.session_state["active_view"] == "quiz":
         
         col_qbtn1, col_qbtn2 = st.columns(2)
         with col_qbtn1:
-            st.markdown("<div class='primary-action-btn'>", unsafe_allow_html=True)
+            st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
             check_btn = st.button("✅ تأكيد الإجابة", use_container_width=True, disabled=st.session_state["quiz_answered"])
             st.markdown("</div>", unsafe_allow_html=True)
         with col_qbtn2:
@@ -986,7 +1042,7 @@ elif st.session_state["active_view"] == "quiz":
                 prepare_new_round(st.session_state["quiz_level"])
                 st.rerun()
         with col_end2:
-            st.markdown("<div class='primary-action-btn'>", unsafe_allow_html=True)
+            st.markdown("<div class='action-submit-btn'>", unsafe_allow_html=True)
             if st.button("⚡ توليد أسئلة بالذكاء الاصطناعي", use_container_width=True):
                 with st.spinner("جاري استحضار تحديات فقهية جديدة..."):
                     new_q = generate_dynamic_quiz_questions(st.session_state["quiz_level"])
@@ -997,8 +1053,8 @@ elif st.session_state["active_view"] == "quiz":
             st.markdown("</div>", unsafe_allow_html=True)
 # ----------------- 6. شاشة المفضلة والإحصائيات -----------------
 elif st.session_state["active_view"] == "bookmarks":
-    st.markdown("<div class='back-btn'>", unsafe_allow_html=True)
-    if st.button("⬅️ العودة للقائمة الرئيسية", use_container_width=True):
+    st.markdown("<div class='back-nav-btn'>", unsafe_allow_html=True)
+    if st.button("⬅️ العودة للرئيسية", use_container_width=True):
         st.session_state["active_view"] = "home"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
@@ -1058,7 +1114,7 @@ elif st.session_state["active_view"] == "bookmarks":
                     mime="text/html",
                     key=f"dl_bmark_{idx}"
                 )
-# 9. التذييل
+# 9. التذييل الفاخر
 st.markdown("""
 <div class="royal-footer">
     <div style="color: #9ca3af; margin-bottom: 0.5rem;">نظام فقهي استدلالي وتوثيقي مقارن مبني بنماذج الذكاء الاصطناعي المتقدمة</div>
